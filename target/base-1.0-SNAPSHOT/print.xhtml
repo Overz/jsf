@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+  <h:body>
+    <h:panelGrid>
+      <f:facet name="header">
+        <h:outputLabel value="Dados:" />
+      </f:facet>
+
+      <h:outputLabel value="Nome:" />
+      <h:outputText value="#{clienteC.nome}" />
+
+      <h:outputLabel value="Salario:" />
+      <h:outputText value="#{clienteC.salario}" />
+
+      <h:outputLabel value="Dt Nascimento:" />
+      <h:outputText value="#{clienteC.dtNascimento}" />
+    </h:panelGrid>
+  </h:body>
+</html>

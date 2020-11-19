@@ -1,0 +1,3 @@
+br/com/jsf/controller/ClienteController.class
+br/com/jsf/db/GenerateTable.class
+br/com/jsf/db/Connection.class
