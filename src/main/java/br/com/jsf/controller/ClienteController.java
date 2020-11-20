@@ -18,6 +18,16 @@ public class ClienteController {
 		return "print";
 	}
 
+	public String limpar() {
+		this.nome = null;
+		this.salario = null;
+		this.dtNascimento = null;
+		System.out.println("Limpou" + nome);
+		System.out.println("Limpou" + salario);
+		System.out.println("Limpou" + dtNascimento);
+		return null;
+	}
+
 	public String getNome() {
 		return nome;
 	}

@@ -18,9 +18,11 @@
         >Documentação</a
       >
     </h4>
+    <button onclick="window.location.reload()">Refresh</button>
+
     <h:form id="form-listar">
-      <h:panelGrid columns="3">
-        <h:outputLabel value="Nome:" for="nome" />
+      <p:panelGrid columns="3" styleClass="ui-noborder">
+        <p:outputLabel value="Nome:" for="nome" />
         <p:inputText
           id="nome"
           value="#{clienteC.nome}"
@@ -28,10 +30,10 @@
           required="true"
           requiredMessage="Nome é obrigatório!"
         />
-        <h:message for="nome" />
+        <p:message for="nome" />
 
-        <h:outputLabel value="Salario:" for="salario" />
-        <p:inputText
+        <p:outputLabel value="Salario:" for="salario" />
+        <p:inputNumber
           id="salario"
           value="#{clienteC.salario}"
           placeholder="Digite seu salario"
@@ -39,18 +41,19 @@
           requiredMessage="Salario é obrigatório!"
           converter="javax.faces.Double"
         />
-        <h:message for="salario" />
+        <p:message for="salario" />
 
-        <h:outputLabel value="Dt Nascimento:" for="data" />
+        <p:outputLabel value="Dt Nascimento:" for="data" />
         <p:calendar
           id="data"
           value="#{clienteC.dtNascimento}"
           placeholder="Data de Nascimento"
           required="true"
-          requiredMessage="Salario é obrigatório!"
+          requiredMessage="Data de Nascimento é obrigatório!"
           locale="pt_BR"
+          showOn="button"
         />
-        <h:message for="data" />
+        <p:message for="data" />
         <!-- Todo conteúdo dentro da tag PanelGrid é considerado coluna, até comentario,
         o real sentido do comentario é pra jogar o botão para o lado -->
         <h:commandButton
@@ -58,7 +61,7 @@
           value="Listar"
           action="#{clienteC.salvar()}"
         />
-      </h:panelGrid>
+      </p:panelGrid>
     </h:form>
   </h:body>
 </html>

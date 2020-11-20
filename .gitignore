@@ -23,3 +23,10 @@
 hs_err_pid*
 
 node_modules
+.settings
+.classpath
+.project
+.idea
+*.iml
+package-lock.json
+target
