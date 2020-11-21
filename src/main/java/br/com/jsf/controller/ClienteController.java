@@ -2,9 +2,11 @@ package br.com.jsf.controller;
 
 import java.util.Date;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import lombok.NoArgsConstructor;
 
-@SessionScoped
+@NoArgsConstructor
+@ViewScoped
 @ManagedBean(name = "clienteC")
 public class ClienteController {
 	private String nome;
@@ -22,9 +24,9 @@ public class ClienteController {
 		this.nome = null;
 		this.salario = null;
 		this.dtNascimento = null;
-		System.out.println("Limpou" + nome);
-		System.out.println("Limpou" + salario);
-		System.out.println("Limpou" + dtNascimento);
+		System.out.println("Limpou " + nome);
+		System.out.println("Limpou " + salario);
+		System.out.println("Limpou " + dtNascimento);
 		return null;
 	}
 

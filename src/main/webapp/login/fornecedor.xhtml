@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:p="http://primefaces.org/ui"
+>
+  <ui:composition template="./index.xhtml">
+    <ui:define name="content">
+      <h:form id="cadastro-fornecedor">
+        <p:messages id="msgPesquisar" showDetail="true" showSummary="true">
+          <p:tabView activeIndex="#{fornecedorC.aba}">
+            <p:tab title="Pesquisar">
+              <p:panel
+                id="basic"
+                header="Pesquisar Fornecedor"
+                style="margin-bottom: 20px"
+              >
+                <h:panelGrid columns="3" cellpadding="10">
+                  <p:outputLabel for="pesquisarNome" value="Nome:" />
+                  <p:inputText
+                    id="pesquisarNome"
+                    value="#{fornecedorC.fornecedorVO.nome}"
+                  />
+                  <p:commandButton
+                    value="Pesquisar"
+                    action="#{fornecedorC.find()}"
+                  />
+                </h:panelGrid>
+                <p:dataTable
+                  id="tabela"
+                  value="cliente"
+                  paginator="10"
+                  rows="10"
+                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPage}"
+                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecord}"
+                  rowsPerPageTemplate="5,10,15"
+                  emptyMessage="Nenhum Cliente Encontrado!"
+                >
+                  <p:column headerText="Cliente">
+                    <h:outputLabel />
+                  </p:column>
+                  <p:column headerText="CPF">
+                    <h:outputLabel />
+                  </p:column>
+                  <p:column headerText="E-Mail">
+                    <h:outputLabel />
+                  </p:column>
+                  <p:column headerText="Telefon">
+                    <h:outputLabel />
+                  </p:column>
+                  <p:column headerText="Ação">
+                    <h:outputLabel />
+                  </p:column>
+                </p:dataTable>
+              </p:panel>
+            </p:tab>
+            <p:tab title="Novo"> </p:tab>
+          </p:tabView>
+        </p:messages>
+      </h:form>
+    </ui:define>
+  </ui:composition>
+</html>

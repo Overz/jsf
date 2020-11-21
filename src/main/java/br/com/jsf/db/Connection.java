@@ -5,6 +5,7 @@
  */
 package br.com.jsf.db;
 
+import br.com.jsf.model.vo.*;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
@@ -57,7 +58,13 @@ public class Connection {
 		return session;
 	}
 
-	private static void annotated(Configuration config) {}
+	private static void annotated(Configuration config) {
+		config.addAnnotatedClass(PessoaVO.class);
+		config.addAnnotatedClass(FornecedorVO.class);
+		config.addAnnotatedClass(ProdutoVO.class);
+		config.addAnnotatedClass(CategoriaVO.class);
+		config.addAnnotatedClass(TelefoneVO.class);
+	}
 
 	public void closeSession(@Disposes Session session) {
 		session.close();

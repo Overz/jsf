@@ -21,7 +21,7 @@
     <button onclick="window.location.reload()">Refresh</button>
 
     <h:form id="form-listar">
-      <p:panelGrid columns="3" styleClass="ui-noborder">
+      <p:panelGrid id="pgrid" columns="3" styleClass="ui-noborder">
         <p:outputLabel value="Nome:" for="nome" />
         <p:inputText
           id="nome"
@@ -56,9 +56,10 @@
         <p:message for="data" />
         <!-- Todo conteúdo dentro da tag PanelGrid é considerado coluna, até comentario,
         o real sentido do comentario é pra jogar o botão para o lado -->
-        <h:commandButton
+        <p:commandButton
           id="btnListar"
           value="Listar"
+          update="pgrid"
           action="#{clienteC.salvar()}"
         />
       </p:panelGrid>
