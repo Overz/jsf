@@ -5,6 +5,7 @@
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
   xmlns:h="http://xmlns.jcp.org/jsf/html"
   xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
 >
   <ui:composition template="./index.xhtml">
     <ui:define name="content">
@@ -22,37 +23,49 @@
                   <p:inputText
                     id="pesquisarNome"
                     value="#{fornecedorC.fornecedorVO.nome}"
+                    required="true"
+                    requiredMessage="Nome é Obrigatório!"
                   />
                   <p:commandButton
                     value="Pesquisar"
                     action="#{fornecedorC.find()}"
+                    update="cadastro-fornecedor"
                   />
                 </h:panelGrid>
                 <p:dataTable
                   id="tabela"
-                  value="cliente"
-                  paginator="10"
+                  value="fornecedor"
+                  paginator="true"
+                  emptyMessage="Nenhum Fornecedor Encontrado!"
                   rows="10"
-                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPage}"
-                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecord}"
+                  reflow="true"
+                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
                   rowsPerPageTemplate="5,10,15"
-                  emptyMessage="Nenhum Cliente Encontrado!"
                 >
                   <p:column headerText="Cliente">
-                    <h:outputLabel />
-                  </p:column>
-                  <p:column headerText="CPF">
-                    <h:outputLabel />
+                    <h:outputText />
                   </p:column>
                   <p:column headerText="E-Mail">
-                    <h:outputLabel />
+                    <h:outputText />
                   </p:column>
-                  <p:column headerText="Telefon">
-                    <h:outputLabel />
+                  <p:column headerText="Telefone">
+                    <h:outputText />
+                  </p:column>
+                  <p:column headerText="Data de Cadastro">
+                    <h:outputText />
                   </p:column>
                   <p:column headerText="Ação">
-                    <h:outputLabel />
+                    <h:outputText />
                   </p:column>
+
+                  <f:facet name="paginatorTopLeft">
+                    <p:commandButton type="button" icon="pi pi-refresh" />
+                  </f:facet>
+
+                  <f:facet name="paginatorBottomRight">
+                    <p:commandButton type="button" icon="pi pi-cloud-upload" />
+                  </f:facet>
                 </p:dataTable>
               </p:panel>
             </p:tab>
