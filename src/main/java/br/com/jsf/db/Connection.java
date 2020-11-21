@@ -51,7 +51,7 @@ public class Connection {
 
 	@Produces
 	@RequestScoped
-	public Session getSession() {
+	public static Session getSession() {
 		if (session == null || !session.isOpen()) {
 			session = sessionFactory.openSession();
 		}
