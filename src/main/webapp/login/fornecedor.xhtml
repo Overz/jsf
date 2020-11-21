@@ -11,7 +11,7 @@
     <ui:define name="content">
       <h:form id="cadastro-fornecedor">
         <p:messages id="msgPesquisar" showDetail="true" showSummary="true">
-          <p:tabView activeIndex="#{fornecedorC.aba}">
+          <p:tabView>
             <p:tab title="Pesquisar">
               <p:panel
                 id="basic"
@@ -28,13 +28,14 @@
                   />
                   <p:commandButton
                     value="Pesquisar"
-                    action="#{fornecedorC.find()}"
+                    actionListener="#{fornecedorC.pesquisarPorNome()}"
                     update="cadastro-fornecedor"
                   />
                 </h:panelGrid>
                 <p:dataTable
                   id="tabela"
-                  value="fornecedor"
+                  var="fornecedor"
+                  value="#{fornecedorC.dataModel}"
                   paginator="true"
                   emptyMessage="Nenhum Fornecedor Encontrado!"
                   rows="10"
@@ -44,16 +45,16 @@
                   rowsPerPageTemplate="5,10,15"
                 >
                   <p:column headerText="Cliente">
-                    <h:outputText />
+                    <h:outputText value="#{fornecedor.id}" />
                   </p:column>
                   <p:column headerText="E-Mail">
-                    <h:outputText />
+                    <h:outputText value="#{fornecedor.email}" />
                   </p:column>
                   <p:column headerText="Telefone">
-                    <h:outputText />
+                    <h:outputText value="#{fornecedor.telefone}" />
                   </p:column>
                   <p:column headerText="Data de Cadastro">
-                    <h:outputText />
+                    <h:outputText value="#{fornecedor.dtCadastro}" />
                   </p:column>
                   <p:column headerText="Ação">
                     <h:outputText />

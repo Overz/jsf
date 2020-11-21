@@ -19,27 +19,27 @@ public class EnderecoVO implements Serializable {
 	private Long id;
 
 	@Basic
-	@Column(name = "logradouro", nullable = false)
+	@Column(name = "logradouro")
 	private String logradouro;
 
 	@Basic
-	@Column(name = "numero", nullable = false)
+	@Column(name = "numero")
 	private String numero;
 
 	@Basic
-	@Column(name = "bairro", nullable = false)
+	@Column(name = "bairro")
 	private String bairro;
 
 	@Basic
-	@Column(name = "cidade", nullable = false)
+	@Column(name = "cidade")
 	private String cidade;
 
 	@Basic
-	@Column(name = "estado", nullable = false)
+	@Column(name = "estado")
 	private String estado;
 
 	@Basic
-	@Column(name = "complemento", nullable = false)
+	@Column(name = "complemento")
 	private String complemento;
 
 	@ManyToOne(targetEntity = FornecedorVO.class, cascade = { CascadeType.ALL })
