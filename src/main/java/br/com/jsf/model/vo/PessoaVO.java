@@ -36,10 +36,10 @@ public class PessoaVO implements Serializable {
 	@Column(name = "telefone")
 	private String telefone;
 
-	@OneToOne(
-		mappedBy = "pessoa",
-		cascade = { CascadeType.ALL },
-		targetEntity = EnderecoVO.class
-	)
-	private EnderecoVO enderecoVO;
+//	@OneToOne(
+//		mappedBy = "pessoa",
+//		cascade = { CascadeType.ALL },
+//		targetEntity = EnderecoVO.class
+//	)
+//	private EnderecoVO enderecoVO;
 }

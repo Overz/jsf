@@ -4,11 +4,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @RequiredArgsConstructor
 @Data
 @Entity(name = "endereco")
@@ -44,11 +42,7 @@ public class EnderecoVO implements Serializable {
 	@Column(name = "complemento", nullable = false)
 	private String complemento;
 
-	@JoinColumn(name = "idPessoa", referencedColumnName = "id", nullable = false)
-	@OneToOne(
-		mappedBy = "endereco",
-		cascade = { CascadeType.ALL },
-		targetEntity = PessoaVO.class
-	)
-	private PessoaVO pessoaVO;
+	@ManyToOne(targetEntity = FornecedorVO.class, cascade = { CascadeType.ALL })
+	@JoinColumn(name = "idFornecedor")
+	private FornecedorVO fornecedorVO;
 }

@@ -4,11 +4,9 @@ import java.io.Serializable;
 import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @RequiredArgsConstructor
 @Data
 @Entity(name = "produto")
@@ -43,7 +41,11 @@ public class ProdutoVO implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "idCategoria")
 	private CategoriaVO categoriaVO;
+
+	@ManyToOne
+	@JoinColumn(name = "idFornecedor")
+	private FornecedorVO fornecedorVO;
 }

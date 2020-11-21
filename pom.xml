@@ -78,6 +78,24 @@
             <groupId>org.jboss.weld.servlet</groupId>
             <artifactId>weld-servlet-core</artifactId>
             <version>2.2.7.Final</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jboss-logging</artifactId>
+                    <groupId>org.jboss.logging</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-core-impl</artifactId>
+            <version>2.1.2.Final</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jboss-logging</artifactId>
+                    <groupId>org.jboss.logging</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -232,6 +250,14 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.2.18</version>
+        </dependency>
+
+
     </dependencies>
    
     <repositories>
@@ -245,6 +271,7 @@
     
     <build>
         <plugins>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -257,6 +284,7 @@
                     </compilerArguments>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>

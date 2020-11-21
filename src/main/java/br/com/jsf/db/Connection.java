@@ -64,6 +64,7 @@ public class Connection {
 		config.addAnnotatedClass(ProdutoVO.class);
 		config.addAnnotatedClass(CategoriaVO.class);
 		config.addAnnotatedClass(TelefoneVO.class);
+		config.addAnnotatedClass(EnderecoVO.class);
 	}
 
 	public void closeSession(@Disposes Session session) {
