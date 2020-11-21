@@ -13,10 +13,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @Entity(name = "fornecedor")
-@Table(
-	name = "fornecedor",
-	indexes = { @Index(columnList = "nome", name = "ix_fornecedor_nome") }
-)
+@Table(name = "fornecedor")
 @PrimaryKeyJoinColumn(name = "id")
 public class FornecedorVO extends PessoaVO {
 	private static final long serialVersionUID = 1L;
@@ -33,7 +30,7 @@ public class FornecedorVO extends PessoaVO {
 	private List<ProdutoVO> produtoVOList;
 
 	@OneToMany(
-		mappedBy = "fornecedor",
+		mappedBy = "fornecedorVO",
 		cascade = { CascadeType.ALL },
 		targetEntity = EnderecoVO.class
 	)
