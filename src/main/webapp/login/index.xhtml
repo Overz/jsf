@@ -58,6 +58,21 @@
       </h:form>
     </div>
     <div id="content" class="center_content">
+      <p:ajaxStatus
+        onstart="PF('carregando').show()"
+        onsuccess="PF('carregando').hide()"
+      />
+
+      <p:dialog
+        widgetVar="carregando"
+        modal="true"
+        draggable="false"
+        closable="false"
+        resizable="false"
+        showHeader="false"
+      >
+        <p:graphicImage name="loading2.gif" library="gif" />
+      </p:dialog>
       <ui:insert name="content">
         <p:graphicImage
           library="img"

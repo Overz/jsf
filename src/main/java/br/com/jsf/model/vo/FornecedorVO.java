@@ -7,7 +7,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(toBuilder = true, setterPrefix = "set")
-@ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
@@ -35,4 +34,15 @@ public class FornecedorVO extends PessoaVO {
 		targetEntity = EnderecoVO.class
 	)
 	private List<EnderecoVO> enderecoVOS;
+
+	@Override
+	public String toString() {
+		return (
+			super.toString() +
+			", descricao: " +
+			descricao +
+			", dtCadastro: " +
+			dtCadastro
+		);
+	}
 }

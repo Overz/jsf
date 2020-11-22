@@ -9,16 +9,16 @@
 >
   <ui:composition template="./index.xhtml">
     <ui:define name="content">
-      <h:form id="cadastro-fornecedor">
-        <p:messages id="msgPesquisar" showDetail="true" showSummary="true">
+      <h:form id="crud-fornecedor">
+        <p:growl id="msgPesquisar" showDetail="true" showSummary="true">
           <p:tabView>
             <p:tab title="Pesquisar">
               <p:panel
-                id="basic"
+                id="listagem"
                 header="Pesquisar Fornecedor"
                 style="margin-bottom: 20px"
               >
-                <h:panelGrid columns="3" cellpadding="10">
+                <h:panelGrid columns="4" cellpadding="10">
                   <p:outputLabel for="pesquisarNome" value="Nome:" />
                   <p:inputText
                     id="pesquisarNome"
@@ -28,8 +28,10 @@
                   />
                   <p:commandButton
                     value="Pesquisar"
+                    icon="pi pi-refresh"
                     actionListener="#{fornecedorC.pesquisarPorNome()}"
-                    update="cadastro-fornecedor"
+                    update="tabela"
+                    process="@this pesquisarNome"
                   />
                 </h:panelGrid>
                 <p:dataTable
@@ -54,10 +56,31 @@
                     <h:outputText value="#{fornecedor.telefone}" />
                   </p:column>
                   <p:column headerText="Data de Cadastro">
-                    <h:outputText value="#{fornecedor.dtCadastro}" />
+                    <h:outputText value="#{fornecedor.dtCadastro}">
+                      <f:convertDateTime pattern="dd/MM/yyyy - HH:mm:ss - a" />
+                    </h:outputText>
                   </p:column>
-                  <p:column headerText="Ação">
-                    <h:outputText />
+                  <p:column headerText="Ação" style="text-align: center">
+                    <p:commandButton
+                      value="Excluir"
+                      actionListener="#{fornecedorC.excluir()}"
+                      style="background-color: #d0383b"
+                      update="crud-fornecedor"
+                      icon="pi pi-trash"
+                      process="@this"
+                    >
+                      <p:confirm
+                        header="Confirmar"
+                        message="Deseja realmente excluir?"
+                        icon="pi pi-exclamation-triangle"
+                      />
+                    </p:commandButton>
+                    <p:commandButton
+                      value="Editar"
+                      action="#{fornecedorC.editar()}"
+                      update="crud-fornecedor"
+                      icon="pi pi-pencil"
+                    />
                   </p:column>
 
                   <f:facet name="paginatorTopLeft">
@@ -68,11 +91,82 @@
                     <p:commandButton type="button" icon="pi pi-cloud-upload" />
                   </f:facet>
                 </p:dataTable>
+
+                <p:confirmDialog
+                  global="true"
+                  showEffect="fade"
+                  hideEffect="fade"
+                >
+                  <p:commandButton
+                    value="Sim"
+                    type="button"
+                    styleClass="ui-confirmdialog-yes"
+                    icon="pi pi-check"
+                  />
+                  <p:commandButton
+                    value="Não"
+                    type="button"
+                    styleClass="ui-confirmdialog-no"
+                    icon="pi pi-times"
+                  />
+                </p:confirmDialog>
               </p:panel>
             </p:tab>
-            <p:tab title="Novo"> </p:tab>
+            <p:tab title="Novo">
+              <p:panel
+                id="cadastro"
+                header="Cadastrar Fornecedor"
+                style="margin-bottom: 20px"
+              >
+                <h:panelGrid columns="2" cellpadding="10">
+                  <p:outputLabel value="Nome:" for="nome" />
+                  <p:inputText
+                    id="nome"
+                    required="true"
+                    requiredMessage="Nome é Obrigatório!"
+                    value="#{fornecedorC.fornecedorVO.nome}"
+                  />
+
+                  <p:outputLabel value="E-Mail:" for="email" />
+                  <p:inputText
+                    id="email"
+                    required="true"
+                    requiredMessage="E-Mail é Obrigatório!"
+                    value="#{fornecedorC.fornecedorVO.email}"
+                  />
+
+                  <p:outputLabel value="Telefone:" for="telefone" />
+                  <p:inputMask
+                    id="telefone"
+                    required="true"
+                    mask="(99) 9 9999-9999"
+                    requiredMessage="Telefone é Obrigatório!"
+                    value="#{fornecedorC.fornecedorVO.telefone}"
+                  />
+
+                  <p:outputLabel value="Descricao:" for="descricao" />
+                  <p:inputTextarea
+                    id="descricao"
+                    autoResize="false"
+                    style="resize: vertical; max-height: 350px"
+                    cols="50"
+                    rows="10"
+                    queryDelay="750"
+                    minQueryLength="4"
+                    value="#{fornecedorC.fornecedorVO.descricao}"
+                  />
+                  <!-- -->
+                  <p:commandButton
+                    value="Cadastrar"
+                    icon="pi pi-plus"
+                    actionListener="#{fornecedorC.salvar()}"
+                    update="crud-fornecedor"
+                  />
+                </h:panelGrid>
+              </p:panel>
+            </p:tab>
           </p:tabView>
-        </p:messages>
+        </p:growl>
       </h:form>
     </ui:define>
   </ui:composition>

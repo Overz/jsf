@@ -3,7 +3,6 @@ package br.com.jsf.model.dao;
 import br.com.jsf.db.Connection;
 import br.com.jsf.model.dao.daoi.FornecedorDAO;
 import br.com.jsf.model.dao.impl.FornecedorDaoImp;
-import br.com.jsf.model.vo.EnderecoVO;
 import br.com.jsf.model.vo.FornecedorVO;
 import java.util.Date;
 import java.util.List;
@@ -51,7 +50,6 @@ public class FornecedorDaoImpTest extends Assert implements BaseTEST {
 	@Override
 	public void cadastrar() {
 		System.out.println(getClass().getSimpleName() + " Cadastrar");
-		EnderecoVO e = new EnderecoVO();
 		f =
 			FornecedorVO
 				.builder()

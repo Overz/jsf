@@ -5,6 +5,7 @@ import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder(toBuilder = true, setterPrefix = "set")
@@ -35,10 +36,25 @@ public class PessoaVO implements Serializable {
 	@Basic
 	@Column(name = "telefone")
 	private String telefone;
+
 	//	@OneToOne(
 	//		mappedBy = "pessoa",
 	//		cascade = { CascadeType.ALL },
 	//		targetEntity = EnderecoVO.class
 	//	)
 	//	private EnderecoVO enderecoVO;
+
+	@Override
+	public String toString() {
+		return (
+			"id:" +
+			id +
+			", nome: " +
+			nome +
+			", email: " +
+			email +
+			", telefone: " +
+			telefone
+		);
+	}
 }

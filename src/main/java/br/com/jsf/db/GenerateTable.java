@@ -1,5 +1,6 @@
 package br.com.jsf.db;
 
+import java.util.Arrays;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -15,6 +16,7 @@ public class GenerateTable {
 		} catch (Exception e) {
 			System.out.println(GenerateTable.class.getSimpleName());
 			System.out.println(e.getMessage());
+			System.err.println(Arrays.toString(e.getStackTrace()));
 		}
 	}
 }

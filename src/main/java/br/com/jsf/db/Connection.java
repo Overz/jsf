@@ -6,6 +6,7 @@
 package br.com.jsf.db;
 
 import br.com.jsf.model.vo.*;
+import java.util.Arrays;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
@@ -45,6 +46,7 @@ public class Connection {
 			// Log the exception.
 			System.err.println(Connection.class.getSimpleName());
 			System.err.println(e.getMessage());
+			System.err.println(Arrays.toString(e.getStackTrace()));
 			throw new ExceptionInInitializerError(e);
 		}
 	}
@@ -52,8 +54,14 @@ public class Connection {
 	@Produces
 	@RequestScoped
 	public static Session getSession() {
-		if (session == null || !session.isOpen()) {
-			session = sessionFactory.openSession();
+		try {
+			if (session == null || !session.isOpen()) {
+				session = sessionFactory.openSession();
+			}
+		} catch (Exception e) {
+			System.out.println(Connection.class.getSimpleName());
+			System.out.println(e.getMessage());
+			System.err.println(Arrays.toString(e.getStackTrace()));
 		}
 		return session;
 	}
