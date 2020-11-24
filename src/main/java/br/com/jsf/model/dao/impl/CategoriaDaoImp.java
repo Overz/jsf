@@ -3,13 +3,14 @@ package br.com.jsf.model.dao.impl;
 import br.com.jsf.model.dao.BaseDAOImp;
 import br.com.jsf.model.dao.daoi.CategoriaDAO;
 import br.com.jsf.model.vo.CategoriaVO;
+import java.io.Serializable;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 public class CategoriaDaoImp
 	extends BaseDAOImp<CategoriaVO, Long>
-	implements CategoriaDAO {
+	implements CategoriaDAO, Serializable {
 
 	@Override
 	public List<CategoriaVO> find(Session s, String v) {

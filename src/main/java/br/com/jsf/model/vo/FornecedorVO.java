@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.CreationTimestamp;
 
 @SuperBuilder(toBuilder = true, setterPrefix = "set")
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +22,7 @@ public class FornecedorVO extends PessoaVO {
 	@Column(name = "descricao")
 	private String descricao;
 
-	@Basic
+	@CreationTimestamp
 	@Column(name = "dtcadastro")
 	private Date dtCadastro;
 
@@ -31,7 +32,8 @@ public class FornecedorVO extends PessoaVO {
 	@OneToMany(
 		mappedBy = "fornecedorVO",
 		cascade = { CascadeType.ALL },
-		targetEntity = EnderecoVO.class
+		targetEntity = EnderecoVO.class,
+		fetch = FetchType.LAZY
 	)
 	private List<EnderecoVO> enderecoVOS;
 

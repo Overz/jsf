@@ -1,16 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.jsf.db;
 
 import br.com.jsf.model.vo.*;
 import java.util.Arrays;
-import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Disposes;
-import javax.enterprise.inject.Produces;
-import javax.persistence.PersistenceUnit;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -20,8 +11,6 @@ import org.hibernate.service.ServiceRegistry;
 public class Connection {
 	private static final SessionFactory sessionFactory;
 	private static final ServiceRegistry service;
-
-	@PersistenceUnit
 	private static Session session;
 
 	static {
@@ -51,8 +40,6 @@ public class Connection {
 		}
 	}
 
-	@Produces
-	@RequestScoped
 	public static Session getSession() {
 		try {
 			if (session == null || !session.isOpen()) {
@@ -73,9 +60,5 @@ public class Connection {
 		config.addAnnotatedClass(CategoriaVO.class);
 		config.addAnnotatedClass(TelefoneVO.class);
 		config.addAnnotatedClass(EnderecoVO.class);
-	}
-
-	public void closeSession(@Disposes Session session) {
-		session.close();
 	}
 }

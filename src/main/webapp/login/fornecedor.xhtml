@@ -11,7 +11,7 @@
     <ui:define name="content">
       <h:form id="crud-fornecedor">
         <p:growl id="msgPesquisar" showDetail="true" showSummary="true">
-          <p:tabView>
+          <p:tabView activeIndex="#{fornecedorC.aba}">
             <p:tab title="Pesquisar">
               <p:panel
                 id="listagem"
@@ -29,7 +29,7 @@
                   <p:commandButton
                     value="Pesquisar"
                     icon="pi pi-refresh"
-                    actionListener="#{fornecedorC.pesquisarPorNome()}"
+                    actionListener="#{fornecedorC.pesquisar()}"
                     update="tabela"
                     process="@this pesquisarNome"
                   />
@@ -118,7 +118,7 @@
                 header="Cadastrar Fornecedor"
                 style="margin-bottom: 20px"
               >
-                <h:panelGrid columns="2" cellpadding="10">
+                <h:panelGrid id="gridCadastro" columns="2" cellpadding="10">
                   <p:outputLabel value="Nome:" for="nome" />
                   <p:inputText
                     id="nome"
@@ -160,7 +160,8 @@
                     value="Cadastrar"
                     icon="pi pi-plus"
                     actionListener="#{fornecedorC.salvar()}"
-                    update="crud-fornecedor"
+                    update="@form"
+                    process="@this gridCadastro"
                   />
                 </h:panelGrid>
               </p:panel>

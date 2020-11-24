@@ -3,13 +3,14 @@ package br.com.jsf.model.dao.impl;
 import br.com.jsf.model.dao.BaseDAOImp;
 import br.com.jsf.model.dao.daoi.EnderecoDAO;
 import br.com.jsf.model.vo.EnderecoVO;
+import java.io.Serializable;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 public class EnderecoDaoImp
 	extends BaseDAOImp<EnderecoVO, Long>
-	implements EnderecoDAO {
+	implements EnderecoDAO, Serializable {
 
 	@Override
 	public List<EnderecoVO> find(Session s, String v) {

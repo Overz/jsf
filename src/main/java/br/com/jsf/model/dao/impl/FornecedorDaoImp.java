@@ -3,13 +3,14 @@ package br.com.jsf.model.dao.impl;
 import br.com.jsf.model.dao.BaseDAOImp;
 import br.com.jsf.model.dao.daoi.FornecedorDAO;
 import br.com.jsf.model.vo.FornecedorVO;
+import java.io.Serializable;
 import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 public class FornecedorDaoImp
 	extends BaseDAOImp<FornecedorVO, Long>
-	implements FornecedorDAO {
+	implements FornecedorDAO, Serializable {
 
 	@Override
 	public List<FornecedorVO> find(Session s, String v) {

@@ -41,11 +41,11 @@ public class ProdutoVO implements Serializable {
 	@Column(name = "descricao")
 	private String descricao;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idCategoria")
 	private CategoriaVO categoriaVO;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idFornecedor")
 	private FornecedorVO fornecedorVO;
 }

@@ -1,9 +1,13 @@
 package br.com.jsf.controller;
 
+import static br.com.util.Constantes.ABA_NOVO;
+import static br.com.util.Constantes.ABA_PESQUISAR;
+
 import br.com.jsf.db.Connection;
 import br.com.jsf.model.dao.daoi.FornecedorDAO;
 import br.com.jsf.model.dao.impl.FornecedorDaoImp;
 import br.com.jsf.model.vo.FornecedorVO;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -25,110 +29,109 @@ public class FornecedorController {
 	private FornecedorVO fornecedorVO;
 	private FornecedorDAO dao;
 	private DataModel<FornecedorVO> dataModel;
+	private FacesContext context;
 	private Session s;
-	private String aba;
+	private Integer aba;
 
-	public void pesquisarPorNome() {
+	public void pesquisar() {
 		try {
 			defineProperties();
+			List<FornecedorVO> l;
+			if (
+				fornecedorVO.getNome() != null &&
+				fornecedorVO.getNome().trim().isEmpty()
+			) {
+				l = dao.find(s);
+				dataModel = new ListDataModel<>(l);
+				return;
+			}
 
-			List<FornecedorVO> l = dao.find(s, fornecedorVO.getNome());
+			l = dao.find(s, fornecedorVO.getNome());
 			dataModel = new ListDataModel<>(l);
 		} catch (Exception e) {
 			System.out.println(e.getClass().getSimpleName());
+			System.out.println(getClass().getSimpleName());
 			System.out.println(e.getMessage());
+			message(
+				"Erro!",
+				"Erro ao Consultar por Nome",
+				FacesMessage.SEVERITY_FATAL,
+				null
+			);
 		} finally {
-			s.close();
+			clean(ABA_PESQUISAR);
 		}
 	}
 
 	public void salvar() {
-		FacesContext context = FacesContext.getCurrentInstance();
 		try {
 			defineProperties();
 
 			Boolean r = dao.save(s, fornecedorVO);
 
 			if (!r) {
-				context.addMessage(
-					null,
-					new FacesMessage(
-						"Erro!",
-						"Erro ao Salvar o Fornecedor '" + fornecedorVO.toString() + "' "
-					)
+				message(
+					"Erro!",
+					"Erro ao Salvar o Fornecedor",
+					FacesMessage.SEVERITY_INFO,
+					fornecedorVO.toString()
 				);
+				return;
 			}
 
-			context.addMessage(
-				null,
-				new FacesMessage(
-					"Sucesso!",
-					"Fornecedor '" + fornecedorVO.toString() + "' Cadastrado com Sucesso!"
-				)
+			message(
+				"Sucesso!",
+				"Fornecedor Cadastrador com Sucesso!",
+				FacesMessage.SEVERITY_INFO,
+				fornecedorVO.toString()
 			);
 		} catch (Exception e) {
+			System.out.println(getClass().getSimpleName());
 			System.out.println(e.getClass().getSimpleName());
 			System.out.println(e.getMessage());
-
-			context.addMessage(
-				null,
-				new FacesMessage(
-					"Erro!",
-					"Erro ao Salvar o Fornecedor '" + fornecedorVO.toString() + "' "
-				)
+			message(
+				"Erro",
+				"Erro ao salvar o Fornecedor:",
+				FacesMessage.SEVERITY_FATAL,
+				fornecedorVO.toString()
 			);
 		} finally {
-			s.close();
+			clean(ABA_NOVO);
 		}
 	}
 
 	public void excluir() {
 		fornecedorVO = dataModel.getRowData();
-		FacesContext context = FacesContext.getCurrentInstance();
 		try {
 			defineProperties();
 			Boolean r = dao.delete(s, fornecedorVO);
 			if (!r) {
-				context.addMessage(
-					null,
-					new FacesMessage(
-						"Erro!",
-						"Erro ao Excluir o Fornecedor '" + fornecedorVO.toString() + "' "
-					)
-				);
-			}
-			context.addMessage(
-				null,
-				new FacesMessage(
-					"Sucesso!",
-					"Fornecedor '" + fornecedorVO.toString() + "' Excluido com Sucesso!"
-				)
-			);
-		} catch (Exception e) {
-			System.out.println(e.getClass().getSimpleName());
-			System.out.println(e.getMessage());
-			context.addMessage(
-				null,
-				new FacesMessage(
+				message(
 					"Erro!",
-					"Erro ao excluir o Fornecedor '" + fornecedorVO.toString() + "' "
-				)
+					"Erro ao Excluir o Fornecedor: ",
+					FacesMessage.SEVERITY_ERROR,
+					fornecedorVO.toString()
+				);
+				return;
+			}
+			message(
+				"Sucesso!",
+				"Fornecedor Excluido com Sucesso!",
+				FacesMessage.SEVERITY_INFO,
+				fornecedorVO.toString()
 			);
-		} finally {
-			s.close();
-		}
-	}
-
-	public void pesquisarTodos() {
-		try {
-			List<FornecedorVO> l = dao.find(s);
-			System.out.println(l);
-			dataModel = new ListDataModel<>(l);
 		} catch (Exception e) {
+			System.out.println(getClass().getSimpleName());
 			System.out.println(e.getClass().getSimpleName());
 			System.out.println(e.getMessage());
+			message(
+				"Erro!",
+				"Erro ao Excluir o Fornecedor: ",
+				FacesMessage.SEVERITY_FATAL,
+				fornecedorVO.toString()
+			);
 		} finally {
-			s.close();
+			clean(ABA_PESQUISAR);
 		}
 	}
 
@@ -142,6 +145,12 @@ public class FornecedorController {
 		return fornecedorVO;
 	}
 
+	private void clean(int aba) {
+		this.aba = aba;
+		s.close();
+		fornecedorVO = null;
+	}
+
 	private void defineProperties() {
 		if (dao == null) {
 			dao = new FornecedorDaoImp();
@@ -150,5 +159,18 @@ public class FornecedorController {
 		if (s == null || !s.isOpen()) {
 			s = Connection.getSession();
 		}
+	}
+
+	private void message(
+		String title,
+		String message,
+		FacesMessage.Severity type,
+		String toString
+	) {
+		context = FacesContext.getCurrentInstance();
+		context.addMessage(
+			null,
+			new FacesMessage(type, title, message + " '" + toString + "' ")
+		);
 	}
 }
