@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:h="http://xmlns.jcp.org/jsf/html"
+  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+  xmlns:p="http://primefaces.org/ui"
+>
+  <ui:composition template="./index.xhtml">
+    <ui:define name="content">
+      <h:form id="crud-produto">
+        <p:growl id="msgCrudProduto" showDetail="true" showSummary="true">
+          <p:tabView>
+            <p:tab title="Pesquisar">
+              <p:panel
+                id="listagem-produto"
+                header="Pesquisar Produto"
+                style="margin-bottom: 20px"
+              >
+                <h:panelGrid columns="3" cellpadding="10">
+                  <p:outputLabel value="Nome:" for="pesquisarNomeProduto" />
+                  <p:inputText
+                    id="pesquisarNomeProduto"
+                    value="#{produtoC.produtoVO.nome}"
+                    required="true"
+                    requiredMessage="Nome é Obrigatório!"
+                  />
+                  <p:commandButton
+                    value="Pesquisar"
+                    icon="pi pi-refresh"
+                    actionListener="#{produtoC.pesquisar()}"
+                    update="tabelaProduto"
+                    process="@this pesquisarNomeProduto"
+                  />
+                </h:panelGrid>
+                <p:dataTable
+                  id="tabelaProduto"
+                  var="produto"
+                  value="#{produtoC.dataModel}"
+                  paginator="true"
+                  emptyMessage="Nenhum Produto Encontrado!"
+                  rows="10"
+                  reflow="true"
+                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                  rowsPerPageTemplate="5,10,15"
+                >
+                  <p:column headerText="Produto">
+                    <h:outputLabel value="#{produto.id}" />
+                  </p:column>
+                  <p:column headerText="Preço">
+                    <h:outputLabel value="#{produto.preco}}" />
+                  </p:column>
+                  <p:column headerText="Estoque">
+                    <h:outputLabel value="#{produto.estoque}" />
+                  </p:column>
+                  <p:column headerText="Código">
+                    <h:outputLabel value="#{produto.codigo}" />
+                  </p:column>
+                  <p:column headerText="Descrição">
+                    <h:outputLabel value="#{produto.descricao}" />
+                  </p:column>
+                  <p:column headerText="Ação" style="text-align: center">
+                    <p:commandButton>
+                      <p:confirm
+                        header="Confirmar"
+                        message="Deseja realmente excluir?"
+                        icon="pi pi-exclamation-triangle"
+                      />
+                    </p:commandButton>
+                    <p:commandButton
+                      value="Editar"
+                      actionListener="#{produtoC.editar()}"
+                      update="@form"
+                      icon="pi pi-pencil"
+                      process="@this"
+                    />
+                  </p:column>
+                </p:dataTable>
+                <p:confirmDialog
+                  global="true"
+                  showEffect="fade"
+                  hideEffect="fade"
+                >
+                  <p:commandButton
+                    value="Sim"
+                    type="button"
+                    styleClass="ui-confirmdialog-yes"
+                    icon="pi pi-check"
+                  />
+                  <p:commandButton
+                    value="Não"
+                    type="button"
+                    styleClass="ui-confirmdialog-no"
+                    icon="pi pi-times"
+                  />
+                </p:confirmDialog>
+              </p:panel>
+            </p:tab>
+            <p:tab title="Novo">
+              <h1>Teste</h1>
+            </p:tab>
+          </p:tabView>
+        </p:growl>
+      </h:form>
+    </ui:define>
+  </ui:composition>
+</html>

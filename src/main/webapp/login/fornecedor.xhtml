@@ -10,18 +10,18 @@
   <ui:composition template="./index.xhtml">
     <ui:define name="content">
       <h:form id="crud-fornecedor">
-        <p:growl id="msgPesquisar" showDetail="true" showSummary="true">
+        <p:growl id="msgCrudFornecedor" showDetail="true" showSummary="true">
           <p:tabView activeIndex="#{fornecedorC.aba}">
             <p:tab title="Pesquisar">
               <p:panel
-                id="listagem"
+                id="listagem-fornecedor"
                 header="Pesquisar Fornecedor"
                 style="margin-bottom: 20px"
               >
-                <h:panelGrid columns="4" cellpadding="10">
-                  <p:outputLabel for="pesquisarNome" value="Nome:" />
+                <h:panelGrid columns="3" cellpadding="10">
+                  <p:outputLabel for="pesquisarNomeFornecedor" value="Nome:" />
                   <p:inputText
-                    id="pesquisarNome"
+                    id="pesquisarNomeFornecedor"
                     value="#{fornecedorC.fornecedorVO.nome}"
                     required="true"
                     requiredMessage="Nome é Obrigatório!"
@@ -30,12 +30,12 @@
                     value="Pesquisar"
                     icon="pi pi-refresh"
                     actionListener="#{fornecedorC.pesquisar()}"
-                    update="tabela"
-                    process="@this pesquisarNome"
+                    update="tabelaFornecedor"
+                    process="@this pesquisarNomeFornecedor"
                   />
                 </h:panelGrid>
                 <p:dataTable
-                  id="tabela"
+                  id="tabelaFornecedor"
                   var="fornecedor"
                   value="#{fornecedorC.dataModel}"
                   paginator="true"
@@ -77,9 +77,10 @@
                     </p:commandButton>
                     <p:commandButton
                       value="Editar"
-                      action="#{fornecedorC.editar()}"
-                      update="crud-fornecedor"
+                      actionListener="#{fornecedorC.editar()}"
+                      update="@form"
                       icon="pi pi-pencil"
+                      process="@this"
                     />
                   </p:column>
 
@@ -115,7 +116,7 @@
             <p:tab title="Novo">
               <p:panel
                 id="cadastro"
-                header="Cadastrar Fornecedor"
+                header="Cadastrar/Alterar Fornecedor"
                 style="margin-bottom: 20px"
               >
                 <h:panelGrid id="gridCadastro" columns="2" cellpadding="10">
@@ -156,13 +157,22 @@
                     value="#{fornecedorC.fornecedorVO.descricao}"
                   />
                   <!-- -->
-                  <p:commandButton
-                    value="Cadastrar"
-                    icon="pi pi-plus"
-                    actionListener="#{fornecedorC.salvar()}"
-                    update="@form"
-                    process="@this gridCadastro"
-                  />
+                  <h:panelGroup>
+                    <p:commandButton
+                      value="Cadastrar"
+                      icon="pi pi-plus"
+                      actionListener="#{fornecedorC.salvar()}"
+                      update="@form"
+                      process="@this gridCadastro"
+                    />
+                    <p:commandButton
+                      value="Limpar"
+                      icon="pi pi-refresh"
+                      actionListener="#{fornecedorC.limpar()}"
+                      update="@form"
+                      process="@this"
+                    />
+                  </h:panelGroup>
                 </h:panelGrid>
               </p:panel>
             </p:tab>

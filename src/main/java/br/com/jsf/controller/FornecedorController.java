@@ -96,6 +96,7 @@ public class FornecedorController {
 				fornecedorVO.toString()
 			);
 		} finally {
+			fornecedorVO = null;
 			clean(ABA_NOVO);
 		}
 	}
@@ -131,11 +132,27 @@ public class FornecedorController {
 				fornecedorVO.toString()
 			);
 		} finally {
+			fornecedorVO = null;
 			clean(ABA_PESQUISAR);
 		}
 	}
 
-	public void editar() {}
+	public void limpar() {
+		this.aba = ABA_NOVO;
+		fornecedorVO = null;
+	}
+
+	public void editar() {
+		try {
+			fornecedorVO = dataModel.getRowData();
+		} catch (Exception e) {
+			System.out.println(getClass().getSimpleName());
+			System.out.println(e.getClass().getSimpleName());
+			System.out.println(e.getMessage());
+		} finally {
+			clean(ABA_NOVO);
+		}
+	}
 
 	public FornecedorVO getFornecedorVO() {
 		if (fornecedorVO == null) {
@@ -148,7 +165,6 @@ public class FornecedorController {
 	private void clean(int aba) {
 		this.aba = aba;
 		s.close();
-		fornecedorVO = null;
 	}
 
 	private void defineProperties() {
