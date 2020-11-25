@@ -37,7 +37,7 @@
                 <p:dataTable
                   id="tabelaFornecedor"
                   var="fornecedor"
-                  value="#{fornecedorC.dataModel}"
+                  value="#{fornecedorC.dataModelFornecedor}"
                   paginator="true"
                   emptyMessage="Nenhum Fornecedor Encontrado!"
                   rows="10"
@@ -115,11 +115,15 @@
             </p:tab>
             <p:tab title="Novo">
               <p:panel
-                id="cadastro"
+                id="cadastrarEditarFornecedor"
                 header="Cadastrar/Alterar Fornecedor"
                 style="margin-bottom: 20px"
               >
-                <h:panelGrid id="gridCadastro" columns="2" cellpadding="10">
+                <h:panelGrid
+                  id="gridCadastroFornecedor"
+                  columns="2"
+                  cellpadding="10"
+                >
                   <p:outputLabel value="Nome:" for="nome" />
                   <p:inputText
                     id="nome"
@@ -156,25 +160,101 @@
                     minQueryLength="4"
                     value="#{fornecedorC.fornecedorVO.descricao}"
                   />
-                  <!-- -->
-                  <h:panelGroup>
-                    <p:commandButton
-                      value="Cadastrar"
-                      icon="pi pi-plus"
-                      actionListener="#{fornecedorC.salvar()}"
-                      update="@form"
-                      process="@this gridCadastro"
-                    />
-                    <p:commandButton
-                      value="Limpar"
-                      icon="pi pi-refresh"
-                      actionListener="#{fornecedorC.limpar()}"
-                      update="@form"
-                      process="@this"
-                    />
-                  </h:panelGroup>
                 </h:panelGrid>
+
+                <p:commandButton
+                  value="Modal"
+                  style="margin-bottom: 5px"
+                  type="button"
+                  onclick="PF('dlg2').show();"
+                />
+
+                <p:dialog
+                  header="Modal Dialog"
+                  widgetVar="dlg2"
+                  modal="true"
+                  height="100"
+                >
+                  <h:outputText value="This is a Modal Dialog." />
+                </p:dialog>
+
+                <p:dataTable
+                  id="tabelaEndereco"
+                  var="endereco"
+                  value="#{fornecedorC.listEndereco}"
+                  paginator="true"
+                  emptyMessage="Nenhum Endereço Encontrado!"
+                  rows="10"
+                  reflow="true"
+                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                  rowsPerPageTemplate="5,10,15"
+                >
+                  <p:column headerText="Logradouro">
+                    <h:outputText value="ID: #{endereco.id}" />
+                  </p:column>
+                  <p:column headerText="Número">
+                    <h:outputText value="Nº #{endereco.numero}" />
+                  </p:column>
+                  <p:column headerText="Bairro">
+                    <h:outputText value="#{endereco.bairro}" />
+                  </p:column>
+                  <p:column headerText="Cidade">
+                    <h:outputText value="#{endereco.cidade}" />
+                  </p:column>
+                  <p:column headerText="Estado">
+                    <h:outputText value="#{endereco.estado}" />
+                  </p:column>
+                  <p:column headerText="Complemento">
+                    <h:outputText value="#{endereco.complemento}" />
+                  </p:column>
+                  <p:column headerText="Cep">
+                    <h:outputText value="#{endereco.cep}" />
+                  </p:column>
+                  <!--                  <p:column headerText="Ação" style="text-align: center">-->
+                  <!--                    <p:commandButton-->
+                  <!--                      value="Excluir"-->
+                  <!--                      actionListener="#{fornecedorC.excluir()}"-->
+                  <!--                      style="background-color: #d0383b"-->
+                  <!--                      update="crud-fornecedor"-->
+                  <!--                      icon="pi pi-trash"-->
+                  <!--                      process="@this"-->
+                  <!--                    >-->
+                  <!--                      <p:confirm-->
+                  <!--                        header="Confirmar"-->
+                  <!--                        message="Deseja realmente excluir?"-->
+                  <!--                        icon="pi pi-exclamation-triangle"-->
+                  <!--                      />-->
+                  <!--                    </p:commandButton>-->
+                  <!--                    <p:commandButton-->
+                  <!--                      value="Editar"-->
+                  <!--                      actionListener="#{fornecedorC.editar()}"-->
+                  <!--                      update="@form"-->
+                  <!--                      icon="pi pi-pencil"-->
+                  <!--                      process="@this"-->
+                  <!--                    />-->
+                  <!--                  </p:column>-->
+                </p:dataTable>
               </p:panel>
+
+              <p:panelGrid columns="2">
+                <h:panelGroup>
+                  <p:commandButton
+                    value="Cadastrar"
+                    icon="pi pi-plus"
+                    actionListener="#{fornecedorC.salvar()}"
+                    update="@form"
+                    process="@this gridCadastroFornecedor"
+                  />
+                  <p:commandButton
+                    value="Limpar"
+                    icon="pi pi-refresh"
+                    actionListener="#{fornecedorC.limpar()}"
+                    update="@form"
+                    process="@this"
+                  />
+                </h:panelGroup>
+              </p:panelGrid>
             </p:tab>
           </p:tabView>
         </p:growl>

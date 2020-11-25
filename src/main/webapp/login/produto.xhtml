@@ -5,6 +5,7 @@
   xmlns:h="http://xmlns.jcp.org/jsf/html"
   xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
   xmlns:p="http://primefaces.org/ui"
+  xmlns:f="http://java.sun.com/jsf/core"
 >
   <ui:composition template="./index.xhtml">
     <ui:define name="content">
@@ -36,7 +37,7 @@
                 <p:dataTable
                   id="tabelaProduto"
                   var="produto"
-                  value="#{produtoC.dataModel}"
+                  value="#{produtoC.dataModelProduto}"
                   paginator="true"
                   emptyMessage="Nenhum Produto Encontrado!"
                   rows="10"
@@ -46,22 +47,41 @@
                   rowsPerPageTemplate="5,10,15"
                 >
                   <p:column headerText="Produto">
-                    <h:outputLabel value="#{produto.id}" />
+                    <h:outputLabel value="ID: #{produto.id}" />
                   </p:column>
-                  <p:column headerText="Preço">
-                    <h:outputLabel value="#{produto.preco}}" />
+                  <p:column id="precoProduto" headerText="Preço">
+                    <h:outputLabel value="#{produto.preco}">
+                      <f:convertNumber
+                        type="currency"
+                        for="precoProduto"
+                        currencySymbol="R$"
+                        locale="pt_BR"
+                        maxFractionDigits="2"
+                        maxIntegerDigits="3"
+                        minFractionDigits="1"
+                        minIntegerDigits="1"
+                        currencyCode="BRL"
+                      />
+                    </h:outputLabel>
                   </p:column>
                   <p:column headerText="Estoque">
-                    <h:outputLabel value="#{produto.estoque}" />
+                    <h:outputLabel value="Nº - #{produto.estoque}" />
                   </p:column>
                   <p:column headerText="Código">
-                    <h:outputLabel value="#{produto.codigo}" />
+                    <h:outputLabel value="# #{produto.codigo}" />
                   </p:column>
                   <p:column headerText="Descrição">
                     <h:outputLabel value="#{produto.descricao}" />
                   </p:column>
                   <p:column headerText="Ação" style="text-align: center">
-                    <p:commandButton>
+                    <p:commandButton
+                      value="Excluir"
+                      actionListener="#{produtoC.excluir()}"
+                      style="background-color: #d0383b"
+                      update="@form"
+                      icon="pi pi-trash"
+                      process="@this"
+                    >
                       <p:confirm
                         header="Confirmar"
                         message="Deseja realmente excluir?"
@@ -98,7 +118,83 @@
               </p:panel>
             </p:tab>
             <p:tab title="Novo">
-              <h1>Teste</h1>
+              <p:panel
+                id="cadastrarEditarProduto"
+                header="Cadastrar/Alterar Produto"
+                style="margin-bottom: 20px"
+              >
+                <h:panelGrid
+                  id="gridCadastroProduto"
+                  columns="2"
+                  cellpadding="10"
+                >
+                  <p:outputLabel value="Nome:" for="nome" />
+                  <p:inputText
+                    id="nome"
+                    required="true"
+                    requiredMessage="Nome é Obrigatório!"
+                    value="#{produtoC.produtoVO.nome}"
+                  />
+
+                  <p:outputLabel value="Preço:" for="preco" />
+                  <p:inputNumber
+                    id="preco"
+                    required="true"
+                    requiredMessage="Preço é Obrigatório!"
+                    placeholder="R$"
+                    value="#{produtoC.produtoVO.preco}"
+                  >
+                    <f:convertNumber
+                      for="preco"
+                      type="currency"
+                      currencySymbol="R$"
+                      locale="pt_BR"
+                      maxFractionDigits="2"
+                      maxIntegerDigits="3"
+                      minFractionDigits="1"
+                      minIntegerDigits="1"
+                      currencyCode="BRL"
+                    />
+                  </p:inputNumber>
+
+                  <p:outputLabel value="Estoque:" for="estoque" />
+                  <p:inputText
+                    id="estoque"
+                    required="true"
+                    requiredMessage="Estoque é Obrigatório!"
+                    value="#{produtoC.produtoVO.estoque}"
+                  />
+
+                  <p:outputLabel value="Descrição:" for="descricao" />
+                  <p:inputTextarea
+                    id="descricao"
+                    autoResize="false"
+                    style="resize: vertical; max-height: 350px"
+                    cols="50"
+                    rows="10"
+                    queryDelay="750"
+                    minQueryLength="4"
+                    value="#{produtoC.produtoVO.descricao}"
+                  />
+                  <!-- -->
+                  <h:panelGroup>
+                    <p:commandButton
+                      value="Cadastrar"
+                      icon="pi pi-plus"
+                      actionListener="#{produtoC.salvar()}"
+                      update="@form"
+                      process="@this gridCadastroProduto"
+                    />
+                    <p:commandButton
+                      value="Limpar"
+                      icon="pi pi-refresh"
+                      actionListener="#{produtoC.limpar()}"
+                      update="@form"
+                      process="@this"
+                    />
+                  </h:panelGroup>
+                </h:panelGrid>
+              </p:panel>
             </p:tab>
           </p:tabView>
         </p:growl>

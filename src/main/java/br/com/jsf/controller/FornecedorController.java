@@ -4,10 +4,11 @@ import static br.com.util.Constantes.ABA_NOVO;
 import static br.com.util.Constantes.ABA_PESQUISAR;
 
 import br.com.jsf.db.Connection;
+import br.com.jsf.model.dao.daoi.EnderecoDAO;
 import br.com.jsf.model.dao.daoi.FornecedorDAO;
 import br.com.jsf.model.dao.impl.FornecedorDaoImp;
+import br.com.jsf.model.vo.EnderecoVO;
 import br.com.jsf.model.vo.FornecedorVO;
-import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -26,28 +27,29 @@ import org.hibernate.Session;
 @ViewScoped
 @ManagedBean(name = "fornecedorC")
 public class FornecedorController {
+	private DataModel<FornecedorVO> dataModelFornecedor;
+	private List<FornecedorVO> listFornecedor;
+	private List<EnderecoVO> listEndereco;
 	private FornecedorVO fornecedorVO;
-	private FornecedorDAO dao;
-	private DataModel<FornecedorVO> dataModel;
-	private FacesContext context;
+	private EnderecoVO enderecoVO;
+	private FornecedorDAO daoF;
 	private Session s;
 	private Integer aba;
+	private FacesContext context;
 
 	public void pesquisar() {
 		try {
 			defineProperties();
-			List<FornecedorVO> l;
 			if (
 				fornecedorVO.getNome() != null &&
 				fornecedorVO.getNome().trim().isEmpty()
 			) {
-				l = dao.find(s);
-				dataModel = new ListDataModel<>(l);
-				return;
+				listFornecedor = daoF.find(s);
+			} else {
+				listFornecedor = daoF.find(s, fornecedorVO.getNome());
 			}
 
-			l = dao.find(s, fornecedorVO.getNome());
-			dataModel = new ListDataModel<>(l);
+			dataModelFornecedor = new ListDataModel<>(listFornecedor);
 		} catch (Exception e) {
 			System.out.println(e.getClass().getSimpleName());
 			System.out.println(getClass().getSimpleName());
@@ -55,7 +57,7 @@ public class FornecedorController {
 			message(
 				"Erro!",
 				"Erro ao Consultar por Nome",
-				FacesMessage.SEVERITY_FATAL,
+				FacesMessage.SEVERITY_ERROR,
 				null
 			);
 		} finally {
@@ -67,13 +69,13 @@ public class FornecedorController {
 		try {
 			defineProperties();
 
-			Boolean r = dao.save(s, fornecedorVO);
+			Boolean r = daoF.save(s, fornecedorVO);
 
 			if (!r) {
 				message(
 					"Erro!",
 					"Erro ao Salvar o Fornecedor",
-					FacesMessage.SEVERITY_INFO,
+					FacesMessage.SEVERITY_WARN,
 					fornecedorVO.toString()
 				);
 				return;
@@ -81,7 +83,7 @@ public class FornecedorController {
 
 			message(
 				"Sucesso!",
-				"Fornecedor Cadastrador com Sucesso!",
+				"Fornecedor Cadastrado com Sucesso!",
 				FacesMessage.SEVERITY_INFO,
 				fornecedorVO.toString()
 			);
@@ -92,7 +94,7 @@ public class FornecedorController {
 			message(
 				"Erro",
 				"Erro ao salvar o Fornecedor:",
-				FacesMessage.SEVERITY_FATAL,
+				FacesMessage.SEVERITY_ERROR,
 				fornecedorVO.toString()
 			);
 		} finally {
@@ -102,10 +104,10 @@ public class FornecedorController {
 	}
 
 	public void excluir() {
-		fornecedorVO = dataModel.getRowData();
 		try {
 			defineProperties();
-			Boolean r = dao.delete(s, fornecedorVO);
+			fornecedorVO = dataModelFornecedor.getRowData();
+			Boolean r = daoF.delete(s, fornecedorVO);
 			if (!r) {
 				message(
 					"Erro!",
@@ -144,7 +146,8 @@ public class FornecedorController {
 
 	public void editar() {
 		try {
-			fornecedorVO = dataModel.getRowData();
+			fornecedorVO = dataModelFornecedor.getRowData();
+			listEndereco = fornecedorVO.getEnderecoVOS();
 		} catch (Exception e) {
 			System.out.println(getClass().getSimpleName());
 			System.out.println(e.getClass().getSimpleName());
@@ -168,8 +171,8 @@ public class FornecedorController {
 	}
 
 	private void defineProperties() {
-		if (dao == null) {
-			dao = new FornecedorDaoImp();
+		if (daoF == null) {
+			daoF = new FornecedorDaoImp();
 		}
 
 		if (s == null || !s.isOpen()) {

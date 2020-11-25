@@ -15,7 +15,7 @@ public class FornecedorDaoImp
 	@Override
 	public List<FornecedorVO> find(Session s, String v) {
 		Query<FornecedorVO> qry = s.createQuery(
-			"FROM fornecedor FETCH ALL PROPERTIES WHERE nome LIKE :nome",
+			"FROM fornecedor f JOIN FETCH f.enderecoVOS e WHERE f.nome LIKE :nome",
 			FornecedorVO.class
 		);
 		qry.setParameter("nome", like(v));

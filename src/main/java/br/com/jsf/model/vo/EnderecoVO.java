@@ -2,11 +2,10 @@ package br.com.jsf.model.vo;
 
 import java.io.Serializable;
 import javax.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @RequiredArgsConstructor
 @Data
 @Entity(name = "endereco")
@@ -18,26 +17,37 @@ public class EnderecoVO implements Serializable {
 	@GeneratedValue
 	private Long id;
 
+	@NonNull
 	@Basic
 	@Column(name = "logradouro")
 	private String logradouro;
 
+	@NonNull
 	@Basic
 	@Column(name = "numero")
 	private String numero;
 
+	@NonNull
 	@Basic
 	@Column(name = "bairro")
 	private String bairro;
 
+	@NonNull
 	@Basic
 	@Column(name = "cidade")
 	private String cidade;
 
+	@NonNull
 	@Basic
 	@Column(name = "estado")
 	private String estado;
 
+	@NonNull
+	@Basic
+	@Column(name = "cep")
+	private String cep;
+
+	@NonNull
 	@Basic
 	@Column(name = "complemento")
 	private String complemento;
