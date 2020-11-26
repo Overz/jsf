@@ -22,7 +22,6 @@ public class EnderecoVO implements Serializable {
 	@Column(name = "logradouro")
 	private String logradouro;
 
-	@NonNull
 	@Basic
 	@Column(name = "numero")
 	private String numero;

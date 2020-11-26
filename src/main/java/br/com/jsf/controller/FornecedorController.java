@@ -4,11 +4,18 @@ import static br.com.util.Constantes.ABA_NOVO;
 import static br.com.util.Constantes.ABA_PESQUISAR;
 
 import br.com.jsf.db.Connection;
-import br.com.jsf.model.dao.daoi.EnderecoDAO;
+import br.com.jsf.model.bo.EnderecoBO;
 import br.com.jsf.model.dao.daoi.FornecedorDAO;
 import br.com.jsf.model.dao.impl.FornecedorDaoImp;
+import br.com.jsf.model.dto.EnderecoDTO;
 import br.com.jsf.model.vo.EnderecoVO;
 import br.com.jsf.model.vo.FornecedorVO;
+import com.google.gson.Gson;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -36,6 +43,7 @@ public class FornecedorController {
 	private Session s;
 	private Integer aba;
 	private FacesContext context;
+	private String cep;
 
 	public void pesquisar() {
 		try {
@@ -45,10 +53,11 @@ public class FornecedorController {
 				fornecedorVO.getNome().trim().isEmpty()
 			) {
 				listFornecedor = daoF.find(s);
-			} else {
-				listFornecedor = daoF.find(s, fornecedorVO.getNome());
+				dataModelFornecedor = new ListDataModel<>(listFornecedor);
+				return;
 			}
 
+			listFornecedor = daoF.find(s, fornecedorVO.getNome());
 			dataModelFornecedor = new ListDataModel<>(listFornecedor);
 		} catch (Exception e) {
 			System.out.println(e.getClass().getSimpleName());
@@ -62,6 +71,43 @@ public class FornecedorController {
 			);
 		} finally {
 			clean(ABA_PESQUISAR);
+		}
+	}
+
+	public void pesquisarCEP() {
+		try {
+			Boolean r = EnderecoBO.cep(cep);
+			if (r) {
+				Unirest.setTimeouts(0, 0);
+				HttpResponse<String> response = Unirest
+					.get(
+						"https://viacep.com.br/ws/" +
+						cep.trim().replaceAll("\\D", "") +
+						"/json/"
+					)
+					.asString();
+				Gson g = new Gson();
+				EnderecoDTO dto = g.fromJson(response.getBody(), EnderecoDTO.class);
+				enderecoVO = dto.getEnderecoVO();
+				return;
+			}
+
+			message(
+				"Erro!",
+				"Digite o CEP no Tamanho Correto!",
+				FacesMessage.SEVERITY_WARN,
+				null
+			);
+		} catch (Exception e) {
+			System.out.println(getClass().getSimpleName());
+			System.out.println(e.getClass().getSimpleName());
+			System.out.println(e.getMessage());
+			message(
+				"Erro!",
+				"Erro ao consultar o CEP!",
+				FacesMessage.SEVERITY_ERROR,
+				null
+			);
 		}
 	}
 
@@ -103,6 +149,11 @@ public class FornecedorController {
 		}
 	}
 
+	public void salvarEndereco() {
+		defineProperties();
+		fornecedorVO.setEnderecoVOS(Collections.singletonList(enderecoVO));
+	}
+
 	public void excluir() {
 		try {
 			defineProperties();
@@ -142,6 +193,7 @@ public class FornecedorController {
 	public void limpar() {
 		this.aba = ABA_NOVO;
 		fornecedorVO = null;
+		enderecoVO = null;
 	}
 
 	public void editar() {
@@ -165,6 +217,14 @@ public class FornecedorController {
 		return fornecedorVO;
 	}
 
+	public EnderecoVO getEnderecoVO() {
+		if (enderecoVO == null) {
+			enderecoVO = new EnderecoVO();
+		}
+
+		return enderecoVO;
+	}
+
 	private void clean(int aba) {
 		this.aba = aba;
 		s.close();
@@ -177,6 +237,10 @@ public class FornecedorController {
 
 		if (s == null || !s.isOpen()) {
 			s = Connection.getSession();
+		}
+
+		if (enderecoVO == null) {
+			enderecoVO = new EnderecoVO();
 		}
 	}
 

@@ -50,13 +50,13 @@ public class FornecedorDaoImpTest extends Assert implements BaseTEST {
 
 		EnderecoVO e = new EnderecoVO(
 			"logradouro",
-			"1234",
 			"bairro",
 			"cidade",
 			"estado",
 			"88888888",
 			"complemento"
 		);
+		e.setNumero("12345");
 
 		f.setEnderecoVOS(Collections.singletonList(e));
 		e.setFornecedorVO(f);

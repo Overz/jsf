@@ -47,7 +47,7 @@
                   rowsPerPageTemplate="5,10,15"
                 >
                   <p:column headerText="Cliente">
-                    <h:outputText value="#{fornecedor.id}" />
+                    <h:outputText value="ID: #{fornecedor.id}" />
                   </p:column>
                   <p:column headerText="E-Mail">
                     <h:outputText value="#{fornecedor.email}" />
@@ -163,19 +163,112 @@
                 </h:panelGrid>
 
                 <p:commandButton
-                  value="Modal"
+                  id="modalEndereco"
+                  value="Cadastrar/Editar Endereço"
                   style="margin-bottom: 5px"
                   type="button"
-                  onclick="PF('dlg2').show();"
+                  onclick="PF('modalFornecedorEndereco').show();"
                 />
 
                 <p:dialog
-                  header="Modal Dialog"
-                  widgetVar="dlg2"
-                  modal="true"
-                  height="100"
+                  header="Cadastrar/Editar Endereço"
+                  widgetVar="modalFornecedorEndereco"
+                  height="500"
+                  width="600"
                 >
-                  <h:outputText value="This is a Modal Dialog." />
+                  <h:panelGrid id="gridEndereco" columns="3" cellpadding="10">
+                    <p:outputLabel for="pesquisarPorCepEndereco" value="CEP:" />
+                    <p:inputText
+                      id="pesquisarPorCepEndereco"
+                      value="#{fornecedorC.cep}"
+                      required="true"
+                      requiredMessage="Nome é Obrigatório!"
+                    />
+                    <p:commandButton
+                      value="Pesquisar"
+                      icon="pi pi-refresh"
+                      actionListener="#{fornecedorC.pesquisarCEP()}"
+                      update="gridEndereco"
+                      process="@this pesquisarPorCepEndereco"
+                    />
+
+                    <p:outputLabel value="Logradouro:" for="logradouro" />
+                    <p:inputText
+                      id="logradouro"
+                      required="true"
+                      requiredMessage="Logradouro é Obrigatório!"
+                      value="#{fornecedorC.enderecoVO.logradouro}"
+                    />
+                    <!-- -->
+                    <p:outputLabel value="Número:" for="numero" />
+                    <p:inputText
+                      id="numero"
+                      required="true"
+                      requiredMessage="Número é Ogrigatório!"
+                      value="#{fornecedorC.enderecoVO.numero}"
+                    />
+                    <!-- -->
+
+                    <p:outputLabel value="Bairro:" for="bairro" />
+                    <p:inputText
+                      id="bairro"
+                      required="true"
+                      requiredMessage="Bairro é Obrigatório!"
+                      value="#{fornecedorC.enderecoVO.bairro}"
+                    />
+                    <!-- -->
+
+                    <p:outputLabel value="Cidade:" for="cidade" />
+                    <p:inputText
+                      id="cidade"
+                      required="true"
+                      requiredMessage="Cidade é Obrigatório!"
+                      value="#{fornecedorC.enderecoVO.cidade}"
+                    />
+                    <!-- -->
+
+                    <p:outputLabel value="Estado:" for="estado" />
+                    <p:inputText
+                      id="estado"
+                      required="true"
+                      requiredMessage="Estado é Obrigatório!"
+                      value="#{fornecedorC.enderecoVO.estado}"
+                    />
+                    <!-- -->
+
+                    <p:outputLabel value="Complemento:" for="complemento" />
+                    <p:inputText
+                      id="complemento"
+                      required="true"
+                      requiredMessage="Complemento é Obrigatório!"
+                      value="#{fornecedorC.enderecoVO.complemento}"
+                    />
+                    <!-- -->
+
+                    <p:outputLabel value="CEP:" for="cep" />
+                    <p:inputText
+                      id="cep"
+                      required="true"
+                      requiredMessage="CEP é Obrigatório!"
+                      value="#{fornecedorC.enderecoVO.cep}"
+                    />
+                    <!-- -->
+
+                    <p:commandButton
+                      value="Cadastrar"
+                      icon="pi pi-plus"
+                      actionListener="#{fornecedorC.salvar()}"
+                      update="@form"
+                      process="@this gridCadastroFornecedor"
+                    />
+                    <p:commandButton
+                      value="Limpar"
+                      icon="pi pi-refresh"
+                      actionListener="#{fornecedorC.limpar()}"
+                      update="@form"
+                      process="@this tabelaEndereco"
+                    />
+                  </h:panelGrid>
                 </p:dialog>
 
                 <p:dataTable
@@ -184,6 +277,7 @@
                   value="#{fornecedorC.listEndereco}"
                   paginator="true"
                   emptyMessage="Nenhum Endereço Encontrado!"
+                  editable="true"
                   rows="10"
                   reflow="true"
                   paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -211,29 +305,6 @@
                   <p:column headerText="Cep">
                     <h:outputText value="#{endereco.cep}" />
                   </p:column>
-                  <!--                  <p:column headerText="Ação" style="text-align: center">-->
-                  <!--                    <p:commandButton-->
-                  <!--                      value="Excluir"-->
-                  <!--                      actionListener="#{fornecedorC.excluir()}"-->
-                  <!--                      style="background-color: #d0383b"-->
-                  <!--                      update="crud-fornecedor"-->
-                  <!--                      icon="pi pi-trash"-->
-                  <!--                      process="@this"-->
-                  <!--                    >-->
-                  <!--                      <p:confirm-->
-                  <!--                        header="Confirmar"-->
-                  <!--                        message="Deseja realmente excluir?"-->
-                  <!--                        icon="pi pi-exclamation-triangle"-->
-                  <!--                      />-->
-                  <!--                    </p:commandButton>-->
-                  <!--                    <p:commandButton-->
-                  <!--                      value="Editar"-->
-                  <!--                      actionListener="#{fornecedorC.editar()}"-->
-                  <!--                      update="@form"-->
-                  <!--                      icon="pi pi-pencil"-->
-                  <!--                      process="@this"-->
-                  <!--                    />-->
-                  <!--                  </p:column>-->
                 </p:dataTable>
               </p:panel>
 
@@ -242,9 +313,9 @@
                   <p:commandButton
                     value="Cadastrar"
                     icon="pi pi-plus"
-                    actionListener="#{fornecedorC.salvar()}"
+                    actionListener="#{fornecedorC.salvarEndereco()}"
                     update="@form"
-                    process="@this gridCadastroFornecedor"
+                    process="@this modalEndereco"
                   />
                   <p:commandButton
                     value="Limpar"
