@@ -1,11 +1,11 @@
 package br.com.jsf.controller;
 
-import static br.com.util.Constantes.ABA_NOVO;
-import static br.com.util.Constantes.ABA_PESQUISAR;
+import static br.com.jsf.util.Constantes.*;
 
 import br.com.jsf.db.Connection;
 import br.com.jsf.model.bo.EnderecoBO;
 import br.com.jsf.model.dao.daoi.FornecedorDAO;
+import br.com.jsf.model.dao.impl.EnderecoDaoImp;
 import br.com.jsf.model.dao.impl.FornecedorDaoImp;
 import br.com.jsf.model.dto.EnderecoDTO;
 import br.com.jsf.model.vo.EnderecoVO;
@@ -13,9 +13,7 @@ import br.com.jsf.model.vo.FornecedorVO;
 import com.google.gson.Gson;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -115,6 +113,8 @@ public class FornecedorController {
 		try {
 			defineProperties();
 
+			fornecedorVO.setEnderecoVOS(listEndereco);
+			enderecoVO.setFornecedorVO(fornecedorVO);
 			Boolean r = daoF.save(s, fornecedorVO);
 
 			if (!r) {
@@ -145,13 +145,18 @@ public class FornecedorController {
 			);
 		} finally {
 			fornecedorVO = null;
+			enderecoVO = null;
 			clean(ABA_NOVO);
 		}
 	}
 
 	public void salvarEndereco() {
 		defineProperties();
-		fornecedorVO.setEnderecoVOS(Collections.singletonList(enderecoVO));
+		if (listEndereco == null) {
+			listEndereco = new ArrayList<>();
+		}
+		listEndereco.add(enderecoVO);
+		aba = ABA_NOVO;
 	}
 
 	public void excluir() {
@@ -186,14 +191,52 @@ public class FornecedorController {
 			);
 		} finally {
 			fornecedorVO = null;
+			aba = ABA_PESQUISAR;
 			clean(ABA_PESQUISAR);
 		}
 	}
 
-	public void limpar() {
-		this.aba = ABA_NOVO;
-		fornecedorVO = null;
-		enderecoVO = null;
+	public void excluirEndereco(EnderecoVO end) {
+		try {
+			if (end.getId() == null) {
+				listEndereco.remove(enderecoVO);
+				return;
+			}
+
+			defineProperties();
+			fornecedorVO.getEnderecoVOS().remove(end);
+			end.setFornecedorVO(null);
+			Boolean r = new EnderecoDaoImp().delete(s, end);
+
+			if (!r) {
+				message(
+					"Erro!",
+					"Erro ao Remover o Endereço",
+					FacesMessage.SEVERITY_WARN,
+					null
+				);
+			}
+
+			message(
+				"Sucesso!",
+				"Endereço Excluido com Sucesso!",
+				FacesMessage.SEVERITY_INFO,
+				""
+			);
+		} catch (Exception e) {
+			System.out.println(getClass().getSimpleName());
+			System.out.println(e.getClass().getSimpleName());
+			System.out.println(e.getMessage());
+			message(
+				"Erro!",
+				"Erro ao Remover o Endereço",
+				FacesMessage.SEVERITY_ERROR,
+				null
+			);
+		} finally {
+			enderecoVO = null;
+			clean(ABA_NOVO);
+		}
 	}
 
 	public void editar() {
@@ -206,6 +249,16 @@ public class FornecedorController {
 			System.out.println(e.getMessage());
 		} finally {
 			clean(ABA_NOVO);
+		}
+	}
+
+	public void editarEndereco(EnderecoVO end) {
+		try {
+			this.enderecoVO = end;
+		} catch (Exception e) {
+			System.out.println(getClass().getSimpleName());
+			System.out.println(e.getClass().getSimpleName());
+			System.out.println(e.getMessage());
 		}
 	}
 

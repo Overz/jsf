@@ -33,7 +33,7 @@ public class FornecedorVO extends PessoaVO {
 		mappedBy = "fornecedorVO",
 		cascade = { CascadeType.ALL },
 		targetEntity = EnderecoVO.class,
-		fetch = FetchType.LAZY
+		fetch = FetchType.EAGER
 	)
 	private List<EnderecoVO> enderecoVOS;
 

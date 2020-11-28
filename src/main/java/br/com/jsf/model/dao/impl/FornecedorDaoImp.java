@@ -15,7 +15,7 @@ public class FornecedorDaoImp
 	@Override
 	public List<FornecedorVO> find(Session s, String v) {
 		Query<FornecedorVO> qry = s.createQuery(
-			"FROM fornecedor f JOIN FETCH f.enderecoVOS e WHERE f.nome LIKE :nome",
+			"FROM fornecedor FETCH ALL PROPERTIES WHERE nome LIKE :nome",
 			FornecedorVO.class
 		);
 		qry.setParameter("nome", like(v));
@@ -24,7 +24,9 @@ public class FornecedorDaoImp
 
 	@Override
 	public List<FornecedorVO> find(Session s) {
-		return s.createQuery("FROM fornecedor", FornecedorVO.class).list();
+		return s
+			.createQuery("FROM fornecedor FETCH ALL PROPERTIES", FornecedorVO.class)
+			.list();
 	}
 
 	@Override

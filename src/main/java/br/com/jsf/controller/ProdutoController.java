@@ -1,7 +1,7 @@
 package br.com.jsf.controller;
 
-import static br.com.util.Constantes.ABA_NOVO;
-import static br.com.util.Constantes.ABA_PESQUISAR;
+import static br.com.jsf.util.Constantes.ABA_NOVO;
+import static br.com.jsf.util.Constantes.ABA_PESQUISAR;
 
 import br.com.jsf.db.Connection;
 import br.com.jsf.model.dao.daoi.ProdutoDAO;

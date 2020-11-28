@@ -10,325 +10,334 @@
   <ui:composition template="./index.xhtml">
     <ui:define name="content">
       <h:form id="crud-fornecedor">
-        <p:growl id="msgCrudFornecedor" showDetail="true" showSummary="true">
-          <p:tabView activeIndex="#{fornecedorC.aba}">
-            <p:tab title="Pesquisar">
-              <p:panel
-                id="listagem-fornecedor"
-                header="Pesquisar Fornecedor"
-                style="margin-bottom: 20px"
+        <p:growl id="msgCrudFornecedor" showDetail="true" showSummary="true" />
+        <p:tabView activeIndex="#{fornecedorC.aba}">
+          <p:tab title="Pesquisar">
+            <p:panel
+              id="listagem-fornecedor"
+              header="Pesquisar Fornecedor"
+              style="margin-bottom: 20px"
+            >
+              <h:panelGrid columns="3" cellpadding="10">
+                <p:outputLabel for="pesquisarNomeFornecedor" value="Nome:" />
+                <p:inputText
+                  id="pesquisarNomeFornecedor"
+                  value="#{fornecedorC.fornecedorVO.nome}"
+                  required="true"
+                  requiredMessage="Nome é Obrigatório!"
+                />
+                <p:commandButton
+                  value="Pesquisar"
+                  icon="pi pi-refresh"
+                  actionListener="#{fornecedorC.pesquisar()}"
+                  update="tabelaFornecedor"
+                  process="@this pesquisarNomeFornecedor"
+                />
+              </h:panelGrid>
+              <p:dataTable
+                id="tabelaFornecedor"
+                var="fornecedor"
+                value="#{fornecedorC.dataModelFornecedor}"
+                paginator="true"
+                emptyMessage="Nenhum Fornecedor Encontrado!"
+                rows="10"
+                reflow="true"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                rowsPerPageTemplate="5,10,15"
               >
-                <h:panelGrid columns="3" cellpadding="10">
-                  <p:outputLabel for="pesquisarNomeFornecedor" value="Nome:" />
+                <p:column headerText="Cliente">
+                  <h:outputText value="ID: #{fornecedor.id}" />
+                </p:column>
+                <p:column headerText="E-Mail">
+                  <h:outputText value="#{fornecedor.email}" />
+                </p:column>
+                <p:column headerText="Telefone">
+                  <h:outputText value="#{fornecedor.telefone}" />
+                </p:column>
+                <p:column headerText="Data de Cadastro">
+                  <h:outputText value="#{fornecedor.dtCadastro}">
+                    <f:convertDateTime pattern="dd/MM/yyyy - HH:mm:ss - a" />
+                  </h:outputText>
+                </p:column>
+                <p:column headerText="Ação" style="text-align: center">
+                  <p:commandButton
+                    value="Excluir"
+                    actionListener="#{fornecedorC.excluir()}"
+                    style="background-color: #d0383b"
+                    update="tabelaFornecedor"
+                    icon="pi pi-trash"
+                    process="@this"
+                  >
+                    <p:confirm
+                      header="Confirmar"
+                      message="Deseja realmente excluir?"
+                      icon="pi pi-exclamation-triangle"
+                    />
+                  </p:commandButton>
+                  <p:commandButton
+                    value="Editar"
+                    actionListener="#{fornecedorC.editar()}"
+                    update="@form"
+                    icon="pi pi-pencil"
+                    process="@this"
+                  />
+                </p:column>
+              </p:dataTable>
+
+              <p:confirmDialog
+                global="true"
+                showEffect="fade"
+                hideEffect="fade"
+              >
+                <p:commandButton
+                  value="Sim"
+                  type="button"
+                  styleClass="ui-confirmdialog-yes"
+                  icon="pi pi-check"
+                />
+                <p:commandButton
+                  value="Não"
+                  type="button"
+                  styleClass="ui-confirmdialog-no"
+                  icon="pi pi-times"
+                />
+              </p:confirmDialog>
+            </p:panel>
+          </p:tab>
+          <p:tab title="Novo">
+            <p:panel
+              id="cadastrarEditarFornecedor"
+              header="Cadastrar/Alterar Fornecedor"
+              style="margin-bottom: 20px"
+            >
+              <h:panelGrid
+                id="gridCadastroFornecedor"
+                columns="2"
+                cellpadding="10"
+              >
+                <p:outputLabel value="Nome:" for="nome" />
+                <p:inputText
+                  id="nome"
+                  required="true"
+                  requiredMessage="Nome é Obrigatório!"
+                  value="#{fornecedorC.fornecedorVO.nome}"
+                />
+
+                <p:outputLabel value="E-Mail:" for="email" />
+                <p:inputText
+                  id="email"
+                  required="true"
+                  requiredMessage="E-Mail é Obrigatório!"
+                  value="#{fornecedorC.fornecedorVO.email}"
+                />
+
+                <p:outputLabel value="Telefone:" for="telefone" />
+                <p:inputMask
+                  id="telefone"
+                  required="true"
+                  mask="(99) 9 9999-9999"
+                  requiredMessage="Telefone é Obrigatório!"
+                  value="#{fornecedorC.fornecedorVO.telefone}"
+                />
+
+                <p:outputLabel value="Descricao:" for="descricao" />
+                <p:inputTextarea
+                  id="descricao"
+                  autoResize="false"
+                  style="resize: vertical; max-height: 350px"
+                  cols="50"
+                  rows="10"
+                  queryDelay="750"
+                  minQueryLength="4"
+                  value="#{fornecedorC.fornecedorVO.descricao}"
+                />
+              </h:panelGrid>
+
+              <p:commandButton
+                id="modalEndereco"
+                value="Cadastrar/Editar Endereço"
+                style="margin-bottom: 5px"
+                type="button"
+                onclick="PF('modalFornecedorEndereco').show();"
+              />
+
+              <p:dialog
+                header="Cadastrar/Editar Endereço"
+                widgetVar="modalFornecedorEndereco"
+                height="500"
+                width="600"
+              >
+                <h:panelGrid id="gridEndereco" columns="3" cellpadding="10">
+                  <p:outputLabel for="pesquisarPorCepEndereco" value="CEP:" />
                   <p:inputText
-                    id="pesquisarNomeFornecedor"
-                    value="#{fornecedorC.fornecedorVO.nome}"
+                    id="pesquisarPorCepEndereco"
+                    value="#{fornecedorC.cep}"
                     required="true"
-                    requiredMessage="Nome é Obrigatório!"
+                    requiredMessage="CEP é Obrigatório!"
                   />
                   <p:commandButton
                     value="Pesquisar"
                     icon="pi pi-refresh"
-                    actionListener="#{fornecedorC.pesquisar()}"
-                    update="tabelaFornecedor"
-                    process="@this pesquisarNomeFornecedor"
+                    actionListener="#{fornecedorC.pesquisarCEP()}"
+                    update="gridEndereco crud-fornecedor:msgCrudFornecedor"
+                    process="@this pesquisarPorCepEndereco"
                   />
-                </h:panelGrid>
-                <p:dataTable
-                  id="tabelaFornecedor"
-                  var="fornecedor"
-                  value="#{fornecedorC.dataModelFornecedor}"
-                  paginator="true"
-                  emptyMessage="Nenhum Fornecedor Encontrado!"
-                  rows="10"
-                  reflow="true"
-                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                  rowsPerPageTemplate="5,10,15"
-                >
-                  <p:column headerText="Cliente">
-                    <h:outputText value="ID: #{fornecedor.id}" />
-                  </p:column>
-                  <p:column headerText="E-Mail">
-                    <h:outputText value="#{fornecedor.email}" />
-                  </p:column>
-                  <p:column headerText="Telefone">
-                    <h:outputText value="#{fornecedor.telefone}" />
-                  </p:column>
-                  <p:column headerText="Data de Cadastro">
-                    <h:outputText value="#{fornecedor.dtCadastro}">
-                      <f:convertDateTime pattern="dd/MM/yyyy - HH:mm:ss - a" />
-                    </h:outputText>
-                  </p:column>
-                  <p:column headerText="Ação" style="text-align: center">
-                    <p:commandButton
-                      value="Excluir"
-                      actionListener="#{fornecedorC.excluir()}"
-                      style="background-color: #d0383b"
-                      update="crud-fornecedor"
-                      icon="pi pi-trash"
-                      process="@this"
-                    >
-                      <p:confirm
-                        header="Confirmar"
-                        message="Deseja realmente excluir?"
-                        icon="pi pi-exclamation-triangle"
-                      />
-                    </p:commandButton>
-                    <p:commandButton
-                      value="Editar"
-                      actionListener="#{fornecedorC.editar()}"
-                      update="@form"
-                      icon="pi pi-pencil"
-                      process="@this"
-                    />
-                  </p:column>
 
-                  <f:facet name="paginatorTopLeft">
-                    <p:commandButton type="button" icon="pi pi-refresh" />
-                  </f:facet>
-
-                  <f:facet name="paginatorBottomRight">
-                    <p:commandButton type="button" icon="pi pi-cloud-upload" />
-                  </f:facet>
-                </p:dataTable>
-
-                <p:confirmDialog
-                  global="true"
-                  showEffect="fade"
-                  hideEffect="fade"
-                >
-                  <p:commandButton
-                    value="Sim"
-                    type="button"
-                    styleClass="ui-confirmdialog-yes"
-                    icon="pi pi-check"
-                  />
-                  <p:commandButton
-                    value="Não"
-                    type="button"
-                    styleClass="ui-confirmdialog-no"
-                    icon="pi pi-times"
-                  />
-                </p:confirmDialog>
-              </p:panel>
-            </p:tab>
-            <p:tab title="Novo">
-              <p:panel
-                id="cadastrarEditarFornecedor"
-                header="Cadastrar/Alterar Fornecedor"
-                style="margin-bottom: 20px"
-              >
-                <h:panelGrid
-                  id="gridCadastroFornecedor"
-                  columns="2"
-                  cellpadding="10"
-                >
-                  <p:outputLabel value="Nome:" for="nome" />
+                  <p:outputLabel value="Logradouro:" for="logradouro" />
                   <p:inputText
-                    id="nome"
+                    id="logradouro"
                     required="true"
-                    requiredMessage="Nome é Obrigatório!"
-                    value="#{fornecedorC.fornecedorVO.nome}"
+                    requiredMessage="Logradouro é Obrigatório!"
+                    value="#{fornecedorC.enderecoVO.logradouro}"
                   />
-
-                  <p:outputLabel value="E-Mail:" for="email" />
+                  <!-- -->
+                  <p:outputLabel value="Número:" for="numero" />
                   <p:inputText
-                    id="email"
+                    id="numero"
                     required="true"
-                    requiredMessage="E-Mail é Obrigatório!"
-                    value="#{fornecedorC.fornecedorVO.email}"
+                    requiredMessage="Número é Ogrigatório!"
+                    value="#{fornecedorC.enderecoVO.numero}"
                   />
+                  <!-- -->
 
-                  <p:outputLabel value="Telefone:" for="telefone" />
-                  <p:inputMask
-                    id="telefone"
+                  <p:outputLabel value="Bairro:" for="bairro" />
+                  <p:inputText
+                    id="bairro"
                     required="true"
-                    mask="(99) 9 9999-9999"
-                    requiredMessage="Telefone é Obrigatório!"
-                    value="#{fornecedorC.fornecedorVO.telefone}"
+                    requiredMessage="Bairro é Obrigatório!"
+                    value="#{fornecedorC.enderecoVO.bairro}"
                   />
+                  <!-- -->
 
-                  <p:outputLabel value="Descricao:" for="descricao" />
-                  <p:inputTextarea
-                    id="descricao"
-                    autoResize="false"
-                    style="resize: vertical; max-height: 350px"
-                    cols="50"
-                    rows="10"
-                    queryDelay="750"
-                    minQueryLength="4"
-                    value="#{fornecedorC.fornecedorVO.descricao}"
+                  <p:outputLabel value="Cidade:" for="cidade" />
+                  <p:inputText
+                    id="cidade"
+                    required="true"
+                    requiredMessage="Cidade é Obrigatório!"
+                    value="#{fornecedorC.enderecoVO.cidade}"
                   />
-                </h:panelGrid>
+                  <!-- -->
 
-                <p:commandButton
-                  id="modalEndereco"
-                  value="Cadastrar/Editar Endereço"
-                  style="margin-bottom: 5px"
-                  type="button"
-                  onclick="PF('modalFornecedorEndereco').show();"
-                />
+                  <p:outputLabel value="Estado:" for="estado" />
+                  <p:inputText
+                    id="estado"
+                    required="true"
+                    requiredMessage="Estado é Obrigatório!"
+                    value="#{fornecedorC.enderecoVO.estado}"
+                  />
+                  <!-- -->
 
-                <p:dialog
-                  header="Cadastrar/Editar Endereço"
-                  widgetVar="modalFornecedorEndereco"
-                  height="500"
-                  width="600"
-                >
-                  <h:panelGrid id="gridEndereco" columns="3" cellpadding="10">
-                    <p:outputLabel for="pesquisarPorCepEndereco" value="CEP:" />
-                    <p:inputText
-                      id="pesquisarPorCepEndereco"
-                      value="#{fornecedorC.cep}"
-                      required="true"
-                      requiredMessage="Nome é Obrigatório!"
-                    />
-                    <p:commandButton
-                      value="Pesquisar"
-                      icon="pi pi-refresh"
-                      actionListener="#{fornecedorC.pesquisarCEP()}"
-                      update="gridEndereco"
-                      process="@this pesquisarPorCepEndereco"
-                    />
+                  <p:outputLabel value="Complemento:" for="complemento" />
+                  <p:inputText
+                    id="complemento"
+                    required="true"
+                    requiredMessage="Complemento é Obrigatório!"
+                    value="#{fornecedorC.enderecoVO.complemento}"
+                  />
+                  <!-- -->
 
-                    <p:outputLabel value="Logradouro:" for="logradouro" />
-                    <p:inputText
-                      id="logradouro"
-                      required="true"
-                      requiredMessage="Logradouro é Obrigatório!"
-                      value="#{fornecedorC.enderecoVO.logradouro}"
-                    />
-                    <!-- -->
-                    <p:outputLabel value="Número:" for="numero" />
-                    <p:inputText
-                      id="numero"
-                      required="true"
-                      requiredMessage="Número é Ogrigatório!"
-                      value="#{fornecedorC.enderecoVO.numero}"
-                    />
-                    <!-- -->
+                  <p:outputLabel value="CEP:" for="cep" />
+                  <p:inputText
+                    id="cep"
+                    required="true"
+                    requiredMessage="CEP é Obrigatório!"
+                    value="#{fornecedorC.enderecoVO.cep}"
+                  />
+                  <!-- -->
 
-                    <p:outputLabel value="Bairro:" for="bairro" />
-                    <p:inputText
-                      id="bairro"
-                      required="true"
-                      requiredMessage="Bairro é Obrigatório!"
-                      value="#{fornecedorC.enderecoVO.bairro}"
-                    />
-                    <!-- -->
-
-                    <p:outputLabel value="Cidade:" for="cidade" />
-                    <p:inputText
-                      id="cidade"
-                      required="true"
-                      requiredMessage="Cidade é Obrigatório!"
-                      value="#{fornecedorC.enderecoVO.cidade}"
-                    />
-                    <!-- -->
-
-                    <p:outputLabel value="Estado:" for="estado" />
-                    <p:inputText
-                      id="estado"
-                      required="true"
-                      requiredMessage="Estado é Obrigatório!"
-                      value="#{fornecedorC.enderecoVO.estado}"
-                    />
-                    <!-- -->
-
-                    <p:outputLabel value="Complemento:" for="complemento" />
-                    <p:inputText
-                      id="complemento"
-                      required="true"
-                      requiredMessage="Complemento é Obrigatório!"
-                      value="#{fornecedorC.enderecoVO.complemento}"
-                    />
-                    <!-- -->
-
-                    <p:outputLabel value="CEP:" for="cep" />
-                    <p:inputText
-                      id="cep"
-                      required="true"
-                      requiredMessage="CEP é Obrigatório!"
-                      value="#{fornecedorC.enderecoVO.cep}"
-                    />
-                    <!-- -->
-
-                    <p:commandButton
-                      value="Cadastrar"
-                      icon="pi pi-plus"
-                      actionListener="#{fornecedorC.salvar()}"
-                      update="@form"
-                      process="@this gridCadastroFornecedor"
-                    />
-                    <p:commandButton
-                      value="Limpar"
-                      icon="pi pi-refresh"
-                      actionListener="#{fornecedorC.limpar()}"
-                      update="@form"
-                      process="@this tabelaEndereco"
-                    />
-                  </h:panelGrid>
-                </p:dialog>
-
-                <p:dataTable
-                  id="tabelaEndereco"
-                  var="endereco"
-                  value="#{fornecedorC.listEndereco}"
-                  paginator="true"
-                  emptyMessage="Nenhum Endereço Encontrado!"
-                  editable="true"
-                  rows="10"
-                  reflow="true"
-                  paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                  currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
-                  rowsPerPageTemplate="5,10,15"
-                >
-                  <p:column headerText="Logradouro">
-                    <h:outputText value="ID: #{endereco.id}" />
-                  </p:column>
-                  <p:column headerText="Número">
-                    <h:outputText value="Nº #{endereco.numero}" />
-                  </p:column>
-                  <p:column headerText="Bairro">
-                    <h:outputText value="#{endereco.bairro}" />
-                  </p:column>
-                  <p:column headerText="Cidade">
-                    <h:outputText value="#{endereco.cidade}" />
-                  </p:column>
-                  <p:column headerText="Estado">
-                    <h:outputText value="#{endereco.estado}" />
-                  </p:column>
-                  <p:column headerText="Complemento">
-                    <h:outputText value="#{endereco.complemento}" />
-                  </p:column>
-                  <p:column headerText="Cep">
-                    <h:outputText value="#{endereco.cep}" />
-                  </p:column>
-                </p:dataTable>
-              </p:panel>
-
-              <p:panelGrid columns="2">
-                <h:panelGroup>
                   <p:commandButton
                     value="Cadastrar"
                     icon="pi pi-plus"
                     actionListener="#{fornecedorC.salvarEndereco()}"
-                    update="@form"
-                    process="@this modalEndereco"
+                    update="tabelaEndereco"
+                    process="@this gridEndereco"
+                    onclick="PF('modalFornecedorEndereco').hide();"
                   />
+                </h:panelGrid>
+              </p:dialog>
+
+              <p:dataTable
+                id="tabelaEndereco"
+                var="endereco"
+                value="#{fornecedorC.listEndereco}"
+                paginator="true"
+                emptyMessage="Nenhum Endereço Encontrado!"
+                editable="true"
+                rows="10"
+                reflow="true"
+                paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                rowsPerPageTemplate="5,10,15"
+              >
+                <p:column headerText="Logradouro">
+                  <h:outputText value="ID: #{endereco.id}" />
+                </p:column>
+                <p:column headerText="Número">
+                  <h:outputText value="Nº #{endereco.numero}" />
+                </p:column>
+                <p:column headerText="Bairro">
+                  <h:outputText value="#{endereco.bairro}" />
+                </p:column>
+                <p:column headerText="Cidade">
+                  <h:outputText value="#{endereco.cidade}" />
+                </p:column>
+                <p:column headerText="Estado">
+                  <h:outputText value="#{endereco.estado}" />
+                </p:column>
+                <p:column headerText="Complemento">
+                  <h:outputText value="#{endereco.complemento}" />
+                </p:column>
+                <p:column headerText="Cep">
+                  <h:outputText value="#{endereco.cep}" />
+                </p:column>
+
+                <p:column headerText="Ação" style="text-align: center">
                   <p:commandButton
-                    value="Limpar"
-                    icon="pi pi-refresh"
-                    actionListener="#{fornecedorC.limpar()}"
-                    update="@form"
+                    actionListener="#{fornecedorC.excluirEndereco(endereco)}"
+                    style="background-color: #d0383b"
+                    update="crud-fornecedor"
+                    icon="pi pi-trash"
                     process="@this"
+                  >
+                    <p:confirm
+                      header="Confirmar"
+                      message="Deseja realmente excluir?"
+                      icon="pi pi-exclamation-triangle"
+                    />
+                  </p:commandButton>
+                  <p:commandButton
+                    actionListener="#{fornecedorC.editarEndereco(endereco)}"
+                    update="@form"
+                    icon="pi pi-pencil"
+                    process="@this"
+                    oncomplete="PF('gridEndereco').show();"
                   />
-                </h:panelGroup>
-              </p:panelGrid>
-            </p:tab>
-          </p:tabView>
-        </p:growl>
+                </p:column>
+              </p:dataTable>
+            </p:panel>
+
+            <p:panelGrid columns="2">
+              <h:panelGroup>
+                <!-- -->
+                <p:commandButton
+                  value="Cadastrar"
+                  icon="pi pi-plus"
+                  actionListener="#{fornecedorC.salvar()}"
+                  update="@form"
+                  process="@this @form"
+                />
+                <p:commandButton
+                  value="Limpar"
+                  icon="pi pi-refresh"
+                  actionListener="#{fornecedorC.limpar()}"
+                  update="@form"
+                  process="@this"
+                />
+              </h:panelGroup>
+            </p:panelGrid>
+          </p:tab>
+        </p:tabView>
       </h:form>
     </ui:define>
   </ui:composition>

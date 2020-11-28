@@ -6,6 +6,7 @@ import br.com.jsf.model.vo.EnderecoVO;
 import java.io.Serializable;
 import java.util.List;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 public class EnderecoDaoImp
@@ -15,7 +16,7 @@ public class EnderecoDaoImp
 	@Override
 	public List<EnderecoVO> find(Session s, String v) {
 		Query<EnderecoVO> qry = s.createQuery(
-			"FROM endereco FETCH ALL PROPERTIES WHERE bairro LIKE :bairro",
+			"FROM endereco WHERE bairro LIKE :bairro",
 			EnderecoVO.class
 		);
 		qry.setParameter("bairro", like(v));
@@ -30,5 +31,19 @@ public class EnderecoDaoImp
 	@Override
 	public EnderecoVO findOne(Session s, Long id) {
 		return s.get(EnderecoVO.class, id);
+	}
+
+	@Override
+	public Boolean delete(Session s, EnderecoVO o) {
+		try {
+			Transaction t = s.beginTransaction();
+			s.delete(o);
+			t.commit();
+			return true;
+		} catch (Exception e) {
+			System.out.println(getClass().getSimpleName());
+			System.out.println(e.getClass().getSimpleName());
+		}
+		return false;
 	}
 }
