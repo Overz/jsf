@@ -1,6 +1,7 @@
 package br.com.jsf.controller;
 
-import static br.com.jsf.util.Constantes.*;
+import static br.com.jsf.util.Constantes.ABA_NOVO;
+import static br.com.jsf.util.Constantes.ABA_PESQUISAR;
 
 import br.com.jsf.db.Connection;
 import br.com.jsf.model.bo.EnderecoBO;
@@ -35,8 +36,10 @@ public class FornecedorController {
 	private DataModel<FornecedorVO> dataModelFornecedor;
 	private List<FornecedorVO> listFornecedor;
 	private List<EnderecoVO> listEndereco;
+	private List<String> listEstados;
 	private FornecedorVO fornecedorVO;
 	private EnderecoVO enderecoVO;
+	private EnderecoVO oldEnderecoVO;
 	private FornecedorDAO daoF;
 	private Session s;
 	private Integer aba;
@@ -87,6 +90,7 @@ public class FornecedorController {
 				Gson g = new Gson();
 				EnderecoDTO dto = g.fromJson(response.getBody(), EnderecoDTO.class);
 				enderecoVO = dto.getEnderecoVO();
+				this.cep = enderecoVO.getCep();
 				return;
 			}
 
@@ -154,6 +158,12 @@ public class FornecedorController {
 		defineProperties();
 		if (listEndereco == null) {
 			listEndereco = new ArrayList<>();
+		}
+		if (enderecoVO.getId() != null) {
+			if (enderecoVO.getId().equals(oldEnderecoVO.getId())) {
+				listEndereco.remove(oldEnderecoVO);
+				this.oldEnderecoVO = null;
+			}
 		}
 		listEndereco.add(enderecoVO);
 		aba = ABA_NOVO;
@@ -255,6 +265,8 @@ public class FornecedorController {
 	public void editarEndereco(EnderecoVO end) {
 		try {
 			this.enderecoVO = end;
+			this.oldEnderecoVO = end;
+			this.cep = end.getCep();
 		} catch (Exception e) {
 			System.out.println(getClass().getSimpleName());
 			System.out.println(e.getClass().getSimpleName());
@@ -276,6 +288,14 @@ public class FornecedorController {
 		}
 
 		return enderecoVO;
+	}
+
+	public List<String> getListEstados() {
+		if (listEstados == null || listEstados.isEmpty()) {
+			listEstados = new ArrayList<>();
+			listEstados = populateStates();
+		}
+		return listEstados;
 	}
 
 	private void clean(int aba) {
@@ -308,5 +328,45 @@ public class FornecedorController {
 			null,
 			new FacesMessage(type, title, message + " '" + toString + "' ")
 		);
+	}
+
+	public void limpar() {
+		this.cep = null;
+		this.enderecoVO = null;
+		this.fornecedorVO = null;
+		this.listEndereco = null;
+		this.listFornecedor = null;
+		this.dataModelFornecedor = null;
+	}
+
+	private List<String> populateStates() {
+		listEstados.add("RO");
+		listEstados.add("AC");
+		listEstados.add("AM");
+		listEstados.add("RR");
+		listEstados.add("PA");
+		listEstados.add("AP");
+		listEstados.add("TO");
+		listEstados.add("MA");
+		listEstados.add("PI");
+		listEstados.add("CE");
+		listEstados.add("RN");
+		listEstados.add("PB");
+		listEstados.add("PE");
+		listEstados.add("AL");
+		listEstados.add("SE");
+		listEstados.add("BA");
+		listEstados.add("MG");
+		listEstados.add("ES");
+		listEstados.add("RJ");
+		listEstados.add("SP");
+		listEstados.add("PR");
+		listEstados.add("SC");
+		listEstados.add("RS");
+		listEstados.add("MS");
+		listEstados.add("MT");
+		listEstados.add("GO");
+		listEstados.add("DF");
+		return listEstados;
 	}
 }

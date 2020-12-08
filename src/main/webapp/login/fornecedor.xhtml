@@ -11,7 +11,7 @@
     <ui:define name="content">
       <h:form id="crud-fornecedor">
         <p:growl id="msgCrudFornecedor" showDetail="true" showSummary="true" />
-        <p:tabView activeIndex="#{fornecedorC.aba}">
+        <p:tabView id="tabViewFornecedor" activeIndex="#{fornecedorC.aba}">
           <p:tab title="Pesquisar">
             <p:panel
               id="listagem-fornecedor"
@@ -65,7 +65,7 @@
                     value="Excluir"
                     actionListener="#{fornecedorC.excluir()}"
                     style="background-color: #d0383b"
-                    update="tabelaFornecedor"
+                    update="tabelaFornecedor crud-fornecedor:msgCrudFornecedor"
                     icon="pi pi-trash"
                     process="@this"
                   >
@@ -155,14 +155,16 @@
               </h:panelGrid>
 
               <p:commandButton
-                id="modalEndereco"
+                id="btnCadastrarEnderecoModal"
                 value="Cadastrar/Editar Endereço"
                 style="margin-bottom: 5px"
                 type="button"
                 onclick="PF('modalFornecedorEndereco').show();"
+                onsuccess="#{fornecedorC.getListEstados()}"
               />
 
               <p:dialog
+                id="modalEndereco"
                 header="Cadastrar/Editar Endereço"
                 widgetVar="modalFornecedorEndereco"
                 height="500"
@@ -192,6 +194,7 @@
                     value="#{fornecedorC.enderecoVO.logradouro}"
                   />
                   <!-- -->
+
                   <p:outputLabel value="Número:" for="numero" />
                   <p:inputText
                     id="numero"
@@ -220,12 +223,13 @@
                   <!-- -->
 
                   <p:outputLabel value="Estado:" for="estado" />
-                  <p:inputText
+                  <p:selectOneMenu
                     id="estado"
-                    required="true"
-                    requiredMessage="Estado é Obrigatório!"
-                    value="#{fornecedorC.enderecoVO.estado}"
-                  />
+                    value="#{fornecedorC.listEstados[0]}"
+                  >
+                    <f:selectItem itemLabel="UF's" itemValue="" />
+                    <f:selectItems value="#{fornecedorC.listEstados}" />
+                  </p:selectOneMenu>
                   <!-- -->
 
                   <p:outputLabel value="Complemento:" for="complemento" />
@@ -234,15 +238,6 @@
                     required="true"
                     requiredMessage="Complemento é Obrigatório!"
                     value="#{fornecedorC.enderecoVO.complemento}"
-                  />
-                  <!-- -->
-
-                  <p:outputLabel value="CEP:" for="cep" />
-                  <p:inputText
-                    id="cep"
-                    required="true"
-                    requiredMessage="CEP é Obrigatório!"
-                    value="#{fornecedorC.enderecoVO.cep}"
                   />
                   <!-- -->
 
@@ -288,7 +283,7 @@
                 <p:column headerText="Complemento">
                   <h:outputText value="#{endereco.complemento}" />
                 </p:column>
-                <p:column headerText="Cep">
+                <p:column headerText="CEP">
                   <h:outputText value="#{endereco.cep}" />
                 </p:column>
 
@@ -308,10 +303,10 @@
                   </p:commandButton>
                   <p:commandButton
                     actionListener="#{fornecedorC.editarEndereco(endereco)}"
-                    update="@form"
                     icon="pi pi-pencil"
+                    update="crud-fornecedor:tabViewFornecedor:modalEndereco"
                     process="@this"
-                    oncomplete="PF('gridEndereco').show();"
+                    oncomplete="PF('modalFornecedorEndereco').show();"
                   />
                 </p:column>
               </p:dataTable>

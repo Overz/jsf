@@ -2,11 +2,15 @@ package br.com.jsf.controller;
 
 import static br.com.jsf.util.Constantes.ABA_NOVO;
 import static br.com.jsf.util.Constantes.ABA_PESQUISAR;
+import static br.com.jsf.util.Constantes.FORNECEDOR_TOSTRING;
 
 import br.com.jsf.db.Connection;
 import br.com.jsf.model.dao.daoi.ProdutoDAO;
+import br.com.jsf.model.dao.impl.FornecedorDaoImp;
 import br.com.jsf.model.dao.impl.ProdutoDaoImp;
+import br.com.jsf.model.vo.FornecedorVO;
 import br.com.jsf.model.vo.ProdutoVO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -26,6 +30,8 @@ import org.hibernate.Session;
 @ManagedBean(name = "produtoC")
 public class ProdutoController {
 	private DataModel<ProdutoVO> dataModelProduto;
+	private List<FornecedorVO> listFornecedores;
+	private FornecedorVO fornecedorVO;
 	private FacesContext context;
 	private List<ProdutoVO> l;
 	private ProdutoVO produtoVO;
@@ -63,6 +69,7 @@ public class ProdutoController {
 		try {
 			defineProperties();
 
+			produtoVO.setFornecedorVO(fornecedorVO);
 			Boolean r = dao.save(s, produtoVO);
 
 			if (!r) {
@@ -149,6 +156,7 @@ public class ProdutoController {
 	public void limpar() {
 		this.aba = ABA_NOVO;
 		produtoVO = null;
+		listFornecedores = null;
 	}
 
 	private void clean(int aba) {
@@ -172,6 +180,17 @@ public class ProdutoController {
 		if (s == null || !s.isOpen()) {
 			s = Connection.getSession();
 		}
+	}
+
+	public List<FornecedorVO> getListFornecedores() {
+		defineProperties();
+
+		if (listFornecedores == null || listFornecedores.isEmpty()) {
+			FORNECEDOR_TOSTRING = 1;
+			listFornecedores = new ArrayList<>(new FornecedorDaoImp().find(s));
+		}
+
+		return listFornecedores;
 	}
 
 	private void message(

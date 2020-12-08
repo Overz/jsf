@@ -51,11 +51,7 @@ public class EnderecoVO implements Serializable {
 	@Column(name = "complemento")
 	private String complemento;
 
-	@ManyToOne(
-		targetEntity = FornecedorVO.class,
-		cascade = { CascadeType.ALL },
-		fetch = FetchType.LAZY
-	)
+	@ManyToOne(targetEntity = FornecedorVO.class, fetch = FetchType.LAZY)
 	@JoinColumn(name = "idFornecedor")
 	private FornecedorVO fornecedorVO;
 }

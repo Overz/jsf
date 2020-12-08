@@ -6,6 +6,7 @@ services:
     image: postgres:latest
     restart: on-failure
     hostname: db.local
+    domainname: db.local
     container_name: postgres-container
     environment:
       POSTGRES_PASSWORD: postgres
@@ -23,16 +24,23 @@ services:
     networks:
       applications:
         ipv4_address: 172.20.0.3
+    dns:
+      - 8.8.8.8
+    dns_search:
+      - db.local
 
   adminer:
     image: adminer:latest
     restart: always
-    hostname: adm.local
+    hostname: adm-srv
     container_name: adminer-container
     environment:
       ADMINER_DEFAULT_SERVER: '172.20.0.3'
     ports:
-      - 8000:8080
+      - target: 8080
+        published: 8000
+        protocol: tcp
+        mode: host
     expose:
       - 8000
     depends_on:
@@ -44,6 +52,11 @@ services:
     networks:
       applications:
         ipv4_address: 172.20.0.4
+    dns:
+      - 8.8.8.8
+    dns_search:
+      - adm.local
+
 
 networks:
   applications:

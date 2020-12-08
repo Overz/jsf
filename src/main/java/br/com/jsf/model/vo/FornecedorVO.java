@@ -1,5 +1,7 @@
 package br.com.jsf.model.vo;
 
+import static br.com.jsf.util.Constantes.FORNECEDOR_TOSTRING;
+
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -39,12 +41,15 @@ public class FornecedorVO extends PessoaVO {
 
 	@Override
 	public String toString() {
-		return (
-			super.toString() +
-			", descricao: " +
-			descricao +
-			", dtCadastro: " +
-			dtCadastro
-		);
+		if (FORNECEDOR_TOSTRING == 0) {
+			return (
+				super.toString() +
+				", descricao: " +
+				descricao +
+				", dtCadastro: " +
+				dtCadastro
+			);
+		}
+		return ("ID: " + super.getId() + ", Nome: " + super.getNome());
 	}
 }

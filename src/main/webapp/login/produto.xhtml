@@ -176,6 +176,16 @@
                     minQueryLength="4"
                     value="#{produtoC.produtoVO.descricao}"
                   />
+
+                  <p:outputLabel value="Fornecedores:" for="fornecedores" />
+                  <p:selectOneMenu
+                    id="fornecedores"
+                    value="#{produtoC.fornecedorVO}"
+                  >
+                    <f:selectItem itemLabel="Fornecedores" itemValue="" />
+                    <f:selectItems value="#{produtoC.listFornecedores}" />
+                  </p:selectOneMenu>
+
                   <!-- -->
                   <h:panelGroup>
                     <p:commandButton
